@@ -14,6 +14,14 @@ class Login extends Component {
     }
   }
 
+  isVadidation = () => {
+    if(this.state.email && this.state.password){
+      return this.props.login(this.props.history, this.state)
+    }
+
+    alert("Please Select")
+  }
+
   // componentDidMount(){
   //   this.props.autoLogin();
   // }
@@ -35,7 +43,7 @@ class Login extends Component {
             >
               <p className="login-box-msg">Sign in to start your session</p>
               <form>
-              {/* <span>#Debug {JSON.stringify(this.state)}</span> */}
+             
                 <div className="input-group mb-3">
                   <input
                     type="email"
@@ -73,8 +81,9 @@ class Login extends Component {
                 <div className="row">
                   {/* /.col */}
                   <div className="col-12">
-                    <button onClick={()=>{
-                      this.props.login(this.props.history,this.state)
+                    <button onClick={(e)=>{
+                      e.preventDefault()
+                      this.isVadidation()
                       // alert(JSON.stringify(this.state))
                     }} type="submit" className="btn btn-primary  btn-block"
                     disabled = {this.props.loginReducer.isFetching}

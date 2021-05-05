@@ -34,7 +34,7 @@ class header extends Component {
           <ul className="navbar-nav">
             <li className="nav-item">
               <a
-                className="nav-link"
+                className="nav-link btn_bugermenu_header"
                 data-widget="pushmenu"
                 href="#"
                 role="button"
@@ -77,7 +77,7 @@ class header extends Component {
                   />
                   <div className="container-dropdown-user">
                     <div className="container-text">
-                      <span className="text">Test</span>
+                      <span className="text">{this.userLogin()}</span>
                     </div>
                     <div className="container-button">
                       <button

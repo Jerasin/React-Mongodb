@@ -1,0 +1,22 @@
+.menu{
+    padding-left: 8px;
+    /* background-color: #212529; */
+    color: white;
+}
+
+.icon{
+    padding-right: 8px;
+    
+}
+
+.btn_bugermenu_menu{
+    display: none;
+    color: white;
+}
+
+@media only screen and (max-width: 991px) {
+    .btn_bugermenu_menu {
+      display: inline;
+      padding-left: 60px;
+    }
+  }
