@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
           { email: email, id: data._id },
           // process.env.JWT_SECRET
           privateKey ,  {
-            expiresIn: '1m'
+            expiresIn: Constatns.expiresInToken
           }
         );
 

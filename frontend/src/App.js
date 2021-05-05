@@ -5,15 +5,14 @@ import Login from "./components/login/login";
 import Menu from "./components/menu/menu";
 import Register from "./components/register/register";
 import Stock from "./components/stock/stock";
-import StockCreate from './components/stockCreate';
-import StockEdit from './components/stockEdit'
+import StockCreate from "./components/stockCreate";
+import StockEdit from "./components/stockEdit";
 
 import { connect } from "react-redux";
-import { setApp} from "./actions/app.action";
-import {autoLogin} from './actions/login.action';
+import { setApp } from "./actions/app.action";
+import { autoLogin } from "./actions/login.action";
 
-import {storeState} from './index';
-
+import { storeState } from "./index";
 
 import {
   BrowserRouter as Router,
@@ -26,46 +25,38 @@ import {
 } from "react-router-dom";
 
 const isLogin = () => {
-  return( 
-    localStorage.getItem("localStorageID")
-        
-  ) ;
+  const token = localStorage.getItem("localStorageID");
+  if (typeof token === "string") {
+    return token;
+  }
 };
 
-
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  return(
+  return (
     <Route
-    {...rest}
-    render={props =>
-      isLogin() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to="/login" />
-      )
-    }
-  />
-  )
-  };
-  
+      {...rest}
+      render={(props) =>
+        isLogin() ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  );
+};
+
 const PublicRoute = ({ component: Component, ...rest }) => {
-  return(
+  return (
     <Route
-    {...rest}
-    render={props =>
-      isLogin() ? (
-        <Redirect to="/stock" />
-      ) : (
-        <Component {...props} />
-      )
-    }
-  />
-  )
-  };
+      {...rest}
+      render={(props) =>
+        isLogin() ? <Redirect to="/stock" /> : <Component {...props} />
+      }
+    />
+  );
+};
 
 class App extends Component {
   componentDidMount() {
-    this.props.setApp(this); 
+    this.props.setApp(this);
+    console.log(typeof localStorage.getItem("localStorageID"));
   }
 
   // Function help path to login
@@ -108,10 +99,13 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (appReducer , loginReducer) => ({appReducer ,loginReducer});
+const mapStateToProps = (appReducer, loginReducer) => ({
+  appReducer,
+  loginReducer,
+});
 
 const mapDispatchToProps = {
-  setApp
+  setApp,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

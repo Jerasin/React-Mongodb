@@ -1,4 +1,5 @@
 import {APP_INIT} from './../Constatns'
+import {httpClient} from './../utils/HttpClient'
 
 export const setStateTosetApp = (app) => ({
     type: APP_INIT,

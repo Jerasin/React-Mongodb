@@ -2,6 +2,12 @@
 export const apiUrl = "http://127.0.0.1:4000/api";
 export const imageUrl = "http://127.0.0.1:4000";
 
+export const server = {
+    REGISTER_URL : "/authen/users" ,
+    LOGIN_URL : "/authen/login" ,
+    PRODUCTS_URL : "/stock/product"
+}
+
 export const NOT_CONNECT_NETWORK = "ERROR NETWORK";
 export const NETWORK_CONNECTION_MESSAGE = "OK";
 
@@ -28,13 +34,6 @@ export const HTTP_ADD_STOCK_SUCCESS = "HTTP_ADD_STOCK_SUCCESS";
 export const HTTP_ADD_STOCK_FAILED = "HTTP_ADD_STOCK_FAILED";
 export const HTTP_ADD_STOCK_DUPLICATE = "HTTP_ADD_STOCK_DUPLICATE";
 
-export const TIMEOUT_CONFIG_S = 10000 ;
-
-// Login Page
+// APP Page
 export const APP_INIT = "APP_INIT";
 
-export const server = {
-    REGISTER_URL : "/authen/users" ,
-    LOGIN_URL : "/authen/login" ,
-    PRODUCTS_URL : "/stock/product"
-}

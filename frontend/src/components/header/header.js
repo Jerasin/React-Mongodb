@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-
 import jwt_decode from "jwt-decode";
 
 // Property History and Match can't use from external Tab route you can use wtihRouter for this
@@ -12,11 +11,14 @@ import { connect } from "react-redux";
 import * as actions from "./../../actions/login.action";
 
 class header extends Component {
-  
-  userLogin(){
-    let token = localStorage.getItem("localStorageID")
-    let decoded = jwt_decode(token);
-    return decoded.email
+  userLogin() {
+    try {
+      let token = localStorage.getItem("localStorageID");
+      let decoded = jwt_decode(token);
+      return decoded.email;
+    }catch(err){
+      localStorage.clear();
+    }
   }
 
   // componentDidMount(){
@@ -62,9 +64,7 @@ class header extends Component {
           <ul className="navbar-nav ml-auto">
             <li className="dropdown user user-menu">
               <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                <span className="hidden-xs">
-                  {this.userLogin()}
-                </span>
+                <span className="hidden-xs">{this.userLogin()}</span>
               </a>
 
               <ul className="dropdown-menu dropdown_menu_show">

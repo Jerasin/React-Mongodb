@@ -29,46 +29,48 @@ class Stock extends Component {
   renderRows = () => {
     try {
       const { result, isFetching } = this.props.stockReducer;
-      if (result != null && !isFetching) {
-        return result.map((data) => ( 
-          <tr key={data._id}>
-            <td>
-              <button
-                className="btn btn-primary btn-edit"
-                onClick={() => {
-                  this.props.history.push(`/stock-edit/${data._id}`);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                className="btn btn-primary btn-delete"
-                onClick={(e) => {
-                  this.props.deleteProduct(data._id);
-                }}
-              >
-                Delete
-              </button>
-            </td>
-            <td>{data.product_Code}</td>
-            <td>{data.product_Name}</td>
-            <td>{data.product_Price}</td>
-            <td>{data.product_Stock}</td>
-            <td className="data_Image">
-              { data.product_Image ?
-                <img
-                  className="image" alt=""
-                  src={`${imageUrl}/images/${
-                    data.product_Image
-                  }?dummy=${Math.random()}`}
-                /> : <img style={{borderImage: "10px"}} src="./../../../public/images/react_js_logo.jpg"/>
-              }
-            </td>
-            <td>{data.update_time.split("T")[0]}</td>
-          </tr>
-        ));
+      if (result != null && result.status != "401" && !isFetching) {
+        
+          return result.map((data) => ( 
+            <tr key={data._id}>
+              <td>
+                <button
+                  className="btn btn-primary btn-edit"
+                  onClick={() => {
+                    this.props.history.push(`/stock-edit/${data._id}`);
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-primary btn-delete"
+                  onClick={(e) => {
+                    this.props.deleteProduct(data._id);
+                  }}
+                >
+                  Delete
+                </button>
+              </td>
+              <td>{data.product_Code}</td>
+              <td>{data.product_Name}</td>
+              <td>{data.product_Price}</td>
+              <td>{data.product_Stock}</td>
+              <td className="data_Image">
+                { data.product_Image ?
+                  <img
+                    className="image" alt=""
+                    src={`${imageUrl}/images/${
+                      data.product_Image
+                    }?dummy=${Math.random()}`}
+                  /> : <img style={{borderImage: "10px"}} src="./../../../public/images/react_js_logo.jpg"/>
+                }
+              </td>
+              <td>{data.update_time.split("T")[0]}</td>
+            </tr>
+          ));
       }
     } catch (err) {
+      console.log("map error")
        alert(err);
     }
   };
