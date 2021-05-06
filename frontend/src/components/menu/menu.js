@@ -61,7 +61,7 @@ class menu extends Component {
                 >
                   <a className="nav-link">
                     <i className="fas fa-users icon nav-icon" />
-                    <p>Stock</p>
+                    <p>User</p>
                   </a>
                 </li>
               </ul>

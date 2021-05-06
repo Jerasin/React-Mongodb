@@ -9,6 +9,7 @@ import {
 } from "./../Constatns";
 const initialState = {
   result: null,
+  isAddStock: null,
   isFetching: false,
   isError: false,
   isDuplicate: false,
@@ -17,26 +18,64 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case HTTP_STOCK_FETCHING:
-      return { ...state, result: null, isFetching: true, isError: false };
+      return {
+        ...state,
+        result: null,
+        isFetching: true,
+        isError: false,
+      };
 
     case HTTP_STOCK_SUCCESS:
-      return { ...state, result: payload, isFetching: false, isError: false };
+      return {
+        ...state,
+        result: payload,
+        isFetching: false,
+        isError: false,
+      };
 
     case HTTP_STOCK_FAILED:
-      return { ...state, result: null, isFetching: false, isError: true };
+      return {
+        ...state,
+        result: null,
+        isFetching: false,
+        isError: true,
+      };
 
     case HTTP_ADD_STOCK_FETCHING:
-        return { ...state, result: null, isFetching: true, isError: false , isDuplicate: false };
+      return {
+        ...state,
+        isFetching: true,
+        isAddStock: null,
+        isError: false,
+        isDuplicate: false,
+      };
 
     case HTTP_ADD_STOCK_SUCCESS:
-        return { ...state, result: payload, isFetching: false, isError: false , isDuplicate: false};
+      return {
+        ...state,
+        isFetching: false,
+        isAddStock: payload,
+        isError: false,
+        isDuplicate: false,
+      };
 
     case HTTP_ADD_STOCK_FAILED:
-        return { ...state, result: null, isFetching: false, isError: true , isDuplicate: false};
-    
+      return {
+        ...state,
+        isFetching: false,
+        isAddStock: null,
+        isError: true,
+        isDuplicate: false,
+      };
+
     case HTTP_ADD_STOCK_DUPLICATE:
-        return { ...state, result: null, isFetching: false, isError: false , isDuplicate: true};
-    
+      return {
+        ...state,
+        isFetching: false,
+        isAddStock: null,
+        isError: false,
+        isDuplicate: true,
+      };
 
     default:
       return state;

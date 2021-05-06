@@ -3,12 +3,12 @@ import "./stockCreate.css";
 
 import { connect } from "react-redux";
 
+import jwt_decode from "jwt-decode";
+
 import { withRouter } from "react-router";
 
 import { addProduct } from "./../../actions/stock.action";
-import * as actions from './../../actions/login.action'
-
-
+import * as actions from "./../../actions/login.action";
 
 class StockCreate extends Component {
   constructor(props) {
@@ -20,31 +20,50 @@ class StockCreate extends Component {
       product_Stock: null,
       product_Image: null,
       create_by: null,
-      update_by: null
+      update_by: null,
     };
   }
 
 
-  // test =  () =>{
+  userLogCreate() {
+    try {
+      let token = localStorage.getItem("localStorageID");
+      let decoded = jwt_decode(token);
+      return decoded.email;
+    }catch(err){
+      localStorage.clear();
+    }
+  }
+  
 
-  //   const test = this.props.loginReducer.result;
-  //   // let gg = JSON.parse(result.data)
-  //   console.log(test)
+  isProductCodeDulipcate = () =>{
+    return(
+                   
+      <div className="alert alert-danger alert-dismissible">
+      <button
+        type="button"
+        className="close"
+        data-dismiss="alert"
+        aria-hidden="true"
+      >
+        ×
+      </button>
+      <h5>
+        <i className="icon fas fa-ban" /> ProductCode Duplicate!
+      </h5>
+     
+    </div>
 
-  // }
-
-  // componentDidMount(){
-  //   this.test();
-  // }
-
+    )
+  }
 
   isCheck = () => {
     if (
-      this.state.product_Code  &&
+      this.state.product_Code &&
       this.state.product_Stock &&
       this.state.product_Price &&
       this.state.product_Name != null &&
-      this.state.product_Code  &&
+      this.state.product_Code &&
       this.state.product_Stock &&
       this.state.product_Price &&
       this.state.product_Name != ""
@@ -139,7 +158,10 @@ class StockCreate extends Component {
                   </div>
                 </div>
               </div>
+                      {/* Popup Error */}
+         
             </div>
+
             {/* /.card-body */}
             <div className="card-footer">
               <button
@@ -147,8 +169,7 @@ class StockCreate extends Component {
                 disabled={this.isCheck()}
                 className="btn btn-primary btn-submit"
                 onClick={(e) => {
-                  e.preventDefault()
-                  alert(JSON.stringify(this.state));
+                  e.preventDefault();
 
                   const formData = new FormData();
                   formData.append("product_Code", this.state.product_Code);
@@ -156,7 +177,7 @@ class StockCreate extends Component {
                   formData.append("product_Price", this.state.product_Price);
                   formData.append("product_Stock", this.state.product_Stock);
                   formData.append("product_Image", this.state.product_Image);
-                  formData.append("create_by" , localStorage.getItem("data"))
+                  formData.append("create_by", this.userLogCreate());
                   console.log(formData);
                   this.props.addProduct(this.props.history, formData);
                   console.log(formData);
@@ -182,10 +203,13 @@ class StockCreate extends Component {
   }
 }
 
-const mapStateToProps = (stockReducer , loginReducer) => ({ stockReducer , loginReducer});
+const mapStateToProps = (stockReducer, loginReducer) => ({
+  stockReducer,
+  loginReducer,
+});
 
 const mapDispatchToProps = {
-  addProduct
+  addProduct,
 };
 
 export default connect(

@@ -37,8 +37,9 @@ export const setStateAddStockToFailed = () => ({
   type: HTTP_ADD_STOCK_FAILED,
 })
 
-export const setStateAddStockToDuplicate = () => ({
+export const setStateAddStockToDuplicate = (payload) => ({
   type: HTTP_ADD_STOCK_DUPLICATE,
+  payload
 })
 
 export const getProducts = () =>{
@@ -90,7 +91,7 @@ export const addProduct = (history , credentail) => {
           break;
           
         case "Duplicate":
-          dispatch(setStateAddStockToDuplicate());
+          dispatch(setStateAddStockToDuplicate("Duplicate"));
           break;
       }
   }catch(err){

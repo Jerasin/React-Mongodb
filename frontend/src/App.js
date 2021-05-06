@@ -35,12 +35,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
+      
       render={(props) =>
         isLogin() ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
+    
   );
+  
 };
+
 
 const PublicRoute = ({ component: Component, ...rest }) => {
   return (
@@ -56,7 +60,6 @@ const PublicRoute = ({ component: Component, ...rest }) => {
 class App extends Component {
   componentDidMount() {
     this.props.setApp(this);
-    console.log(typeof localStorage.getItem("localStorageID"));
   }
 
   // Function help path to login
