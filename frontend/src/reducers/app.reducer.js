@@ -1,16 +1,15 @@
-import {APP_INIT} from './../Constatns'
+import { APP_INIT} from "./../Constatns";
 
 const initialState = {
-    app: null
-}
+  app: null,
+};
 
 export default (state = initialState, { type, payload }) => {
-    switch (type) {
-
+  switch (type) {
     case APP_INIT:
-        return { ...state, app: payload }
+      return { ...state, app: payload };
 
     default:
-        return state
-    }
-}
+      return state;
+  }
+};

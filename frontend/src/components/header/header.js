@@ -8,7 +8,8 @@ import { withRouter } from "react-router";
 import "./header.css";
 
 import { connect } from "react-redux";
-import * as actions from "./../../actions/login.action";
+import * as Login_actions from "./../../actions/login.action";
+import * as App_actions from './../../actions/app.action'
 
 class header extends Component {
   userLogin() {
@@ -16,7 +17,7 @@ class header extends Component {
       let token = localStorage.getItem("localStorageID");
       let decoded = jwt_decode(token);
       return decoded.email;
-    }catch(err){
+    } catch (err) {
       localStorage.clear();
     }
   }
@@ -70,12 +71,22 @@ class header extends Component {
               <ul className="dropdown-menu dropdown_menu_show">
                 {/* User image */}
                 <li className="user-header">
-                  <img
-                    src="dist/img/user2-160x160.jpg"
-                    className="img-circle"
-                    alt="User Image"
-                  />
-                  <div className="container-dropdown-user">
+                  
+                    
+                    <div className="container-dropdown-user container-img">
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/menu_banner.jpg`}
+                      alt="Test1"
+                      className="brand-image img-circle elevation-3"
+                      style={{ opacity: ".8" , width: "80px" , height: "80px"}}
+                    />
+                    </div>
+                  
+                  
+                  <div
+                    className="container-dropdown-user"
+                    style={{ paddingTop: "10px" }}
+                  >
                     <div className="container-text">
                       <span className="text">{this.userLogin()}</span>
                     </div>
@@ -85,6 +96,7 @@ class header extends Component {
                         onClick={() => {
                           localStorage.clear();
                           this.props.history.push("/login");
+                          
                           this.props.appReducer.app.forceUpdate();
                         }}
                       >
@@ -109,7 +121,7 @@ const mapStateToProps = ({ appReducer, loginReducer }) => ({
 });
 
 const mapDispatchToProps = {
-  actions,
+  ...Login_actions,...App_actions
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(header));

@@ -14,10 +14,10 @@ class StockCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product_Code: null,
+      product_Code: 0,
       product_Name: null,
-      product_Price: null,
-      product_Stock: null,
+      product_Price: 0,
+      product_Stock: 0,
       product_Image: null,
       create_by: null,
       update_by: null,
@@ -59,13 +59,13 @@ class StockCreate extends Component {
 
   isCheck = () => {
     if (
+      this.state.product_Code >= 0 &&
       this.state.product_Code &&
+      this.state.product_Stock >= 0 &&
       this.state.product_Stock &&
+      this.state.product_Price >= 0 &&
       this.state.product_Price &&
       this.state.product_Name != null &&
-      this.state.product_Code &&
-      this.state.product_Stock &&
-      this.state.product_Price &&
       this.state.product_Name != ""
     ) {
       return false;
@@ -81,6 +81,8 @@ class StockCreate extends Component {
           <div className="card-header">
             <h3 className="card-title">Create Product</h3>
           </div>
+          {console.log(this.state)}
+          
           {/* /.card-header */}
           {/* form start */}
           <form>
@@ -88,7 +90,8 @@ class StockCreate extends Component {
               <div className="form-group">
                 <label>Product Code </label>
                 <input
-                  type="text"
+                  type="number"
+                  min={0}
                   className="form-control"
                   name="product_Code"
                   id="product_Code"
@@ -115,7 +118,8 @@ class StockCreate extends Component {
               <div className="form-group">
                 <label>Product Price</label>
                 <input
-                  type="text"
+                  type="number"
+                  min={0}
                   className="form-control"
                   name="product_Price"
                   id="product_Price"
@@ -129,9 +133,10 @@ class StockCreate extends Component {
               <div className="form-group">
                 <label>Product Stock</label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   name="product_Stock"
+                  min={0}
                   id="product_Stock"
                   placeholder="Enter Product Stock"
                   onChange={(e) => {
@@ -152,7 +157,9 @@ class StockCreate extends Component {
                       multiple
                       accept="image/*"
                       onChange={(e) => {
-                        this.setState({ product_Image: e.target.files[0] });
+                        this.setState({ product_Image: e.target.files[0] }
+                        );
+                        console.log(this.state.product_Image)
                       }}
                     />
                   </div>
@@ -201,6 +208,7 @@ class StockCreate extends Component {
       </div>
     );
   }
+
 }
 
 const mapStateToProps = (stockReducer, loginReducer) => ({

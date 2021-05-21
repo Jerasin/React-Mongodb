@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken')  // ใช้งาน jwt module
 const fs = require('fs') // ใช้งาน file system module ของ nodejs
- 
+
+// Import Config File Env
+const dotenv = require("dotenv");
+dotenv.config();
+
 // สร้าง middleware ฟังก์ชั่นสำหรับ verification token
 const authorization = ((req, res, next) => {
     const authorization = req.headers['authorization']  // ดึงข้อมูล authorization ใน header
@@ -17,11 +21,10 @@ const authorization = ((req, res, next) => {
         "status": 401,
         "message": "Unauthorized"
     })   
-    // ใช้ค่า privateKey เ็น buffer ค่าที่อ่านได้จากไฟล์ private.key ในโฟลเดอร์ config
-    const privateKey = fs.readFileSync(__dirname+'/../config/private.key')
+    
 
     // ทำการยืนยันความถูกต้องของ token
-    jwt.verify(token, privateKey, function(error, decoded) {
+    jwt.verify(token, process.env.JWT_SECRET, function(error, decoded) {
         if(error) return res.json({ // หาก error ไม่ผ่าน
             "status": 401,
             "message": "Unauthorized"

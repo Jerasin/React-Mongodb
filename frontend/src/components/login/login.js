@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import {login} from './../../actions/login.action';
 
+
 import {connect} from 'react-redux'
 class Login extends Component {
 
@@ -22,9 +23,11 @@ class Login extends Component {
     alert("Please Select")
   }
 
-  // componentDidMount(){
-  //   this.props.autoLogin();
-  // }
+  componentDidMount(){
+ 
+    if(this.props.appReducer.app === null) return
+    this.props.appReducer.app.forceUpdate();
+  }
 
   render() {
     return (
@@ -121,8 +124,8 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = ({loginReducer}) => ({
-  loginReducer
+const mapStateToProps = ({loginReducer, appReducer}) => ({
+  loginReducer,appReducer
 })
 
 const mapDispatchToProps = {

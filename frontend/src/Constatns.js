@@ -3,13 +3,24 @@ export const apiUrl = "http://127.0.0.1:4000/api";
 export const imageUrl = "http://127.0.0.1:4000";
 
 export const server = {
-    REGISTER_URL : "/authen/users" ,
-    LOGIN_URL : "/authen/login" ,
-    PRODUCTS_URL : "/stock/product"
-}
+  REGISTER_URL: "/authen/users",
+  LOGIN_URL: "/authen/login",
+  PRODUCTS_URL: "/stock/product",
+  PRODUCTS_SLICE_URL: "/stock/getProducts",
+  SALEORDER_URL: "/saleorder",
+};
+
+// Config Menu Serach Page
+export const limit = 5;
+export const page = 1;
 
 export const NOT_CONNECT_NETWORK = "ERROR NETWORK";
 export const NETWORK_CONNECTION_MESSAGE = "OK";
+
+// Constants SaleOrder Page
+export const HTTP_CREATE_SALEORDER_FETCHING = "HTTP_CREATE_SALEORDER_FETCHING";
+export const HTTP_CREATE_SALEORDER_SUCCESS = "HTTP_CREATE_SALEORDER_SUCCESS";
+export const HTTP_CREATE_SALEORDER_FAILED = "HTTP_CREATE_SALEORDER_FAILED";
 
 // Constatns Register Page
 export const HTTP_REGISTER_FETCHING = "HTTP_REGISTER_FETCHING";
@@ -33,6 +44,11 @@ export const HTTP_ADD_STOCK_FETCHING = "HTTP_ADD_STOCK_FETCHING";
 export const HTTP_ADD_STOCK_SUCCESS = "HTTP_ADD_STOCK_SUCCESS";
 export const HTTP_ADD_STOCK_FAILED = "HTTP_ADD_STOCK_FAILED";
 export const HTTP_ADD_STOCK_DUPLICATE = "HTTP_ADD_STOCK_DUPLICATE";
+
+// Constatns StockEdit Page
+export const HTTP_DEIT_STOCK_FETCHING = "HTTP_DEIT_STOCK_FETCHING";
+export const HTTP_DEIT_STOCK_SUCCESS = "HTTP_DEIT_STOCK_SUCCESS";
+export const HTTP_DEIT_STOCK_FAILED = "HTTP_DEIT_STOCK_FAILED";
 
 // APP Page
 export const APP_INIT = "APP_INIT";

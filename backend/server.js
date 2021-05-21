@@ -9,13 +9,16 @@ const port = process.env.PORT || 4000
 // import Connect Mongodb
 const mongoose = require("mongoose");
 
+// Cross origin Resource Shareing เช็คว่าเป็น Same origin = (protocol + host  + port) ต้องเหมือนกัน / Path ต่างกันได้
+// Cross Origin = (protocol + host  + port) ต่างกัน
 const cors = require("cors");
 
 // Manage Request and Response About Json and Unicoded
-const bodyParser =  require("body-parser");
-app.use(bodyParser.json());
+// const bodyParser =  require("body-parser"); bodyParser เลิกใช้ไปแล้ว
+
+app.use(express.json());
 app.use(express.static(__dirname + "/upload"))
-app.use(bodyParser.urlencoded({
+app.use(express.urlencoded({
     extended: true
 }))
 
@@ -23,8 +26,9 @@ app.use(cors());
 
 
 
-// EndPoint api 
-const dbconfig = require('./database/db.js');
+// DB Config
+const config = require("./config/config");
+
 
 // Express Route
 const usersRoute = require("./routes/api_users");
@@ -33,20 +37,15 @@ app.use("/api/authen", usersRoute)
 const productsRoute = require("./routes/api_stock");
 app.use("/api/stock", productsRoute)
 
+const saleorderRoute = require('./routes/api_saleorder');
+app.use("/api/saleorder" , saleorderRoute)
+
 // Connect Mongodb
-mongoose.Promise = global.Promise;
-mongoose.connect(dbconfig.db,{
-    useNewUrlParser: true
-}).then(()=>{
-    console.log("Database Successfully")
-},
-    error =>{
-        console.log(error);
-    }
-)
+
+mongoose.connect(config.mongoUri)
 
 app.listen(port,()=>{
-    console.log("Server running " +  port)
+    console.log("Server running "+ port)
 })
 
 // 404 Error

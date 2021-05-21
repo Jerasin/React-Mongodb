@@ -34,8 +34,13 @@ body{
 
 .btn-signout{
     margin: 0px;
-    background-color: #d4d4d4;
+    background-color: #ffffff;
     width: 100%;
+}
+
+.text{
+    border: black solid 2px;
+    padding: 0px;
 }
 
 .container-text{
@@ -48,7 +53,8 @@ body{
 }
 
 .user-header{
-    background-color: #4b545c ;
+    background-color: rgb(219, 213, 213);
+    border: black solid 3px;
 }
 
 .ml-auto {
@@ -61,6 +67,13 @@ body{
 
 .hidden-xs{
     color: #fff;
+}
+
+.container-img{
+    background-color: wheat;
+    padding: auto;
+    padding: 8px;
+    border: black solid 3px;
 }
 
 

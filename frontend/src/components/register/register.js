@@ -15,6 +15,7 @@ class Register extends Component {
     this.state = {
       email: null,
       password: null,
+      userRole: "user",
     };
   }
 
@@ -49,6 +50,23 @@ class Register extends Component {
     );
   };
 
+  showSuccess = () => {
+    return(
+      <div className="alert alert-success alert-dismissible">
+      <button
+        type="button"
+        className="close"
+        data-dismiss="alert"
+        aria-hidden="true"
+      >
+      </button>
+      <h5>
+        <i className="icon fas fa-check" /> Register Success
+      </h5>
+    </div>
+    )
+  };
+
   showDuplicate = () => {
     return (
       <div className="alert alert-danger ">
@@ -66,13 +84,12 @@ class Register extends Component {
   };
 
   isVadidation = () => {
-    if(this.state.email && this.state.password){
-      return this.props.register(this.props.history, this.state)
+    if (this.state.email && this.state.password) {
+      return this.props.register(this.props.history, this.state);
     }
 
-    alert("Please Select")
-  }
-
+    alert("Please Select");
+  };
 
   render() {
     return (
@@ -127,6 +144,8 @@ class Register extends Component {
 
                 {this.props.registerReducer.isError && this.showError()}
 
+                {this.props.registerReducer.result === "OK" && this.showSuccess()}
+
                 {/*  logic alert แบบแรก  */}
                 {/* {this.props.registerReducer.isDuplicate && this.showDuplicate()} */}
 
@@ -134,8 +153,6 @@ class Register extends Component {
                 {this.props.registerReducer.isDuplicate
                   ? this.showDuplicate()
                   : null}
-
-                
 
                 {/* Register */}
                 <div className="row">
@@ -146,7 +163,8 @@ class Register extends Component {
                         e.preventDefault();
                         this.isVadidation();
                       }}
-                      type="submit"
+                      type="button"
+                      disabled={this.props.registerReducer.result === "OK"}
                       className="btn btn-primary btn-block"
                     >
                       Register

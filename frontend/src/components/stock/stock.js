@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import "./stock.css";
 import { imageUrl } from "./../../Constatns";
 
+import jwt_decode from "jwt-decode";
 import {
   BrowserRouter as Router,
   Switch,
@@ -22,56 +23,158 @@ class Stock extends Component {
   //   { data1: "xxx", data2: "xxx", data3: "xxx", data4: "xxx", data5: "xxx" },
   // ];
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      serachPage: null,
+    };
+  }
+
   componentDidMount() {
-    this.props.getProducts();
+    this.props.getProducts({ page: 1, limit: 5 });
+  }
+
+  serachPage(page) {
+    try {
+      const { isGetStock, isFetching } = this.props.stockReducer;
+      if (page > isGetStock.lenthData || page === null || !page)
+        return alert("Not you serach Page");
+      this.props.getProducts({ page: page, limit: 5 });
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  userLogin() {
+    try {
+      let token = localStorage.getItem("localStorageID");
+      let decoded = jwt_decode(token);
+      return decoded.userRole;
+    } catch (err) {
+      localStorage.clear();
+    }
+  }
+
+  menuIndex() {
+    try {
+      const { isGetStock, isFetching } = this.props.stockReducer;
+      if (isGetStock != null && isGetStock.status != "401" && !isFetching) {
+        return (
+          <div className="ul-flex">
+            {isGetStock.after > 0 && (
+              <li className="page-item">
+                <b
+                  className="page-link"
+                  onClick={() => {
+                    this.props.getProducts({ page: isGetStock.after, limit: 5 });
+                  }}
+                >
+                  {/* {data.product_Code} */}
+                  {isGetStock.after}
+                </b>
+              </li>
+            )}
+
+            <li className="page-item">
+              <b className="page-link btn-now ">
+                {/* {data.product_Code} */}
+                {isGetStock.now}
+              </b>
+            </li>
+
+            {isGetStock.next <= isGetStock.last && isGetStock.next != isGetStock.now && (
+              <li className="page-item">
+                <b
+                  className="page-link"
+                  onClick={() => {
+                    this.props.getProducts({ page: isGetStock.next, limit: 5 });
+                  }}
+                >
+                  {/* {data.product_Code} */}
+                  {isGetStock.next}
+                </b>
+              </li>
+            )}
+
+            {isGetStock.last != isGetStock.next &&
+              isGetStock.last != isGetStock.now &&
+              isGetStock.last > isGetStock.now && (
+                <li className="page-item">
+                  <b
+                    className="page-link"
+                    onClick={() => {
+                      this.props.getProducts({ page: isGetStock.last, limit: 5 });
+                    }}
+                  >
+                    {/* {data.product_Code} */}
+                    {isGetStock.last}
+                  </b>
+                </li>
+              )}
+          </div>
+        );
+      }
+    } catch (err) {
+      alert(err);
+    }
   }
 
   renderRows = () => {
     try {
-      const { result, isFetching } = this.props.stockReducer;
-      if (result != null && result.status != "401" && !isFetching) {
-        
-          return result.map((data) => ( 
-            <tr key={data._id}>
-              <td>
-                <button
-                  className="btn btn-primary btn-edit"
-                  onClick={() => {
-                    this.props.history.push(`/stock-edit/${data._id}`);
-                  }}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn btn-primary btn-delete"
-                  onClick={(e) => {
-                    this.props.deleteProduct(data._id);
-                  }}
-                >
-                  Delete
-                </button>
-              </td>
-              <td>{data.product_Code}</td>
-              <td>{data.product_Name}</td>
-              <td>{data.product_Price}</td>
-              <td>{data.product_Stock}</td>
-              <td className="data_Image">
-                { data.product_Image ?
-                  <img
-                    className="image" alt=""
-                    src={`${imageUrl}/images/${
-                      data.product_Image
-                    }?dummy=${Math.random()}`}
-                  /> : <img style={{borderImage: "10px"}} src="./../../../public/images/react_js_logo.jpg"/>
-                }
-              </td>
-              <td>{data.update_time.split("T")[0]}</td>
-            </tr>
-          ));
-      }
+      const { isGetStock,idEditStock,isAddStock, isFetching } = this.props.stockReducer;
+
+      if (isGetStock === null  ) return;
+      if(isGetStock.status === 401) return;
+      // console.log(isGetStock === null && isFetching)
+      return isGetStock.result.map((data) => (
+        <tr key={data._id}>
+          {this.userLogin() === "admin" && (
+            <td>
+              <button
+                className="btn btn-primary btn-edit"
+                onClick={() => {
+                  this.props.history.push(`/stock-edit/${data._id}`);
+                }}
+              >
+                Edit
+              </button>
+              <button
+                className="btn btn-primary btn-delete"
+                onClick={(e) => {
+                  this.props.deleteProduct(data._id);
+                }}
+              >
+                Delete
+              </button>
+            </td>
+          )}
+          <td>{data.product_Code}</td>
+          <td>{data.product_Name}</td>
+          <td>{data.product_Price}</td>
+          <td>{data.product_Stock}</td>
+          <td className="data_Image">
+            {data.product_Image !== null && data.product_Image !=="null" ?
+              <img
+                className="image"
+                alt=""
+                src={`${imageUrl}/images/${
+                  data.product_Image
+                }?dummy=${Math.random()}`}
+              /> :  <img
+              src={`${process.env.PUBLIC_URL}/images/no_image.jpg`}
+              alt="Test1"
+              className="image"
+            />
+            }
+          
+    
+          </td>
+          <td>{data.update_time.split("T")[0]}</td>
+        </tr>
+      ));
     } catch (err) {
-      console.log("map error")
-       alert(err);
+      console.log("map error");
+      alert(err);
     }
   };
 
@@ -79,6 +182,7 @@ class Stock extends Component {
     return (
       <div className="content-wrapper">
         {/* Content Header (Page header) */}
+       
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
@@ -90,7 +194,7 @@ class Stock extends Component {
                   <li className="breadcrumb-item">
                     <a href="#">Home</a>
                   </li>
-                  <li className="breadcrumb-item active">DataTables</li>
+                  <li className="breadcrumb-item active">Warehouse</li>
                 </ol>
               </div>
             </div>
@@ -103,25 +207,21 @@ class Stock extends Component {
             <div className="row">
               <div className="col-12">
                 <div className="card">
-                  <div className="card-header">
-                    <h3 className="card-title">
-                      DataTable with minimal features &amp; hover style
-                    </h3>
-                  </div>
-
                   <div className="row">
                     {/* /.col */}
                     <div className="col-12">
-                      <button
-                        style={{ marginBottom: "5px" }}
-                        type="submit"
-                        className="btn btn-primary  btn_create "
-                        onClick={() => {
-                          this.props.history.push("/stock-create");
-                        }}
-                      >
-                        Create Product
-                      </button>
+                      {this.userLogin() === "admin" && (
+                        <button
+                          style={{ marginBottom: "5px" }}
+                          type="submit"
+                          className="btn btn-primary  btn_create "
+                          onClick={() => {
+                            this.props.history.push("/stock-create");
+                          }}
+                        >
+                          Create Product
+                        </button>
+                      )}
                     </div>
                     {/* /.col */}
                   </div>
@@ -135,7 +235,7 @@ class Stock extends Component {
                       >
                         <thead>
                           <tr>
-                            <th>Status</th>
+                            {this.userLogin() === "admin" && <th>Status</th>}
                             <th>Product Code</th>
                             <th>Product Name</th>
                             <th>Product Price</th>
@@ -148,6 +248,31 @@ class Stock extends Component {
                       </table>
                     </div>
                   </div>
+
+                  <nav aria-label="..." className="main-nav">
+                    <ul className="pagination nav-start">{this.menuIndex()}</ul>
+                    <ul className="pagination nav-end">
+                      <label className="SerachPage-label">SerachPage:</label>
+                      <input
+                        type="text"
+                        className="nav-input"
+                        name="serachPage"
+                        onChange={(e) => {
+                          this.setState({ serachPage: e.target.value });
+                          
+                        }}
+                      />
+                      <button
+                        className="btn-select"
+                        onClick={() => {
+                          this.serachPage(this.state.serachPage);
+                        }}
+                      >
+                        Select
+                      </button>
+                    </ul>
+                  </nav>
+
                   {/* /.card-body */}
                 </div>
               </div>
@@ -158,13 +283,15 @@ class Stock extends Component {
           {/* /.container-fluid */}
         </section>
         {/* /.content */}
+   
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ stockReducer , loginReducer }) => ({
-  stockReducer, loginReducer
+const mapStateToProps = ({ stockReducer, loginReducer }) => ({
+  stockReducer,
+  loginReducer,
 });
 
 const mapDispatchToProps = {

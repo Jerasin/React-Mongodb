@@ -26,7 +26,7 @@ export const transformCircular = createTransform(
 
 const persistConfig = {
   key: 'root',
-  whitelist: ['loginReducer'],
+  whitelist: ['stockReducer'],
   storage,
   transforms: [transformCircular]
 }

@@ -1,22 +1,33 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import "./menu.css";
+import jwt_decode from "jwt-decode";
 class menu extends Component {
+
+  userLogin() {
+    try {
+      let token = localStorage.getItem("localStorageID");
+      let decoded = jwt_decode(token);
+      return decoded.userRole;
+    }catch(err){
+      localStorage.clear();
+    }
+  }
+
   render() {
     return (
       <div>
         {/* Main Sidebar Container */}
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
           {/* Brand Logo */}
-          <a href="#" className="brand-link">
+          <div className="brand-link">
             <img
-              src="dist/img/AdminLTELogo.png"
-              alt="AdminLTE Logo"
+              src={`${process.env.PUBLIC_URL}/images/menu_banner.jpg`}
+              alt="Test1"
               className="brand-image img-circle elevation-3"
               style={{ opacity: ".8" }}
             />
-            <span className="brand-text font-weight-light">AdminLTE 3</span>
-           
+            <span className="brand-text font-weight-light">ShopSystem</span>
               <p
                 className="nav-link btn_bugermenu_menu"
                 data-widget="pushmenu"
@@ -26,7 +37,7 @@ class menu extends Component {
                 <i className="fas fa-bars" />
               </p>
               
-          </a>
+          </div>
 
           {/* Sidebar */}
           <div className="sidebar">
@@ -49,11 +60,23 @@ class menu extends Component {
                 >
                   <a className="nav-link">
                     <i className="fas fa-warehouse icon  " />
-                    <p>Stock</p>
+                    <p>Warehouse</p>
                   </a>
                 </li>
 
                 <li
+                  className="nav-item"
+                  onClick={(e) => {
+                    this.props.history.push("/sell");
+                  }}
+                >
+                  <a className="nav-link">
+                    <i className="fas fa-money-bill icon nav-icon" />
+                    <p>Sell</p>
+                  </a>
+                </li>
+
+                {this.userLogin() === "admin" &&<li
                   className="nav-item"
                   onClick={(e) => {
                     this.props.history.push("/user");
@@ -63,7 +86,7 @@ class menu extends Component {
                     <i className="fas fa-users icon nav-icon" />
                     <p>User</p>
                   </a>
-                </li>
+                </li>}
               </ul>
             </nav>
             {/* /.sidebar-menu */}

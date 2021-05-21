@@ -20,8 +20,8 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const authorization = require("./../config/authorize");
-
+const authorization = require("./../authentication/authorize")
+authorization
 const fs = require("fs");
 
 // login
@@ -31,16 +31,13 @@ router.post("/login", async (req, res) => {
   usersSchema.findOne({ email: email }, (error, data) => {
     if (data != null) {
       if (bcrypt.compareSync(password, data.password)) {
-        // ใช้ค่า privateKey เป็น buffer ค่าที่อ่านได้จากไฟล์ private.key ในโฟลเดอร์ config
-        const privateKey = fs.readFileSync(
-          __dirname + "./../config/private.key"
-        );
+        
 
         // generate a token with user id and secret
         const token = jwt.sign(
-          { email: email, id: data._id },
+          { email: email, id: data._id , userRole: data.userRole },
           // process.env.JWT_SECRET
-          privateKey ,  {
+          process.env.JWT_SECRET ,  {
             expiresIn: Constatns.expiresInToken
           }
         );
@@ -97,7 +94,7 @@ router.post("/users", async (req, res, next) => {
 });
 
 //  Get All Users
-router.route("/").get(authorization, (req, res) => {
+router.route("/").get((req, res) => {
   usersSchema.find((error, data) => {
     if (error) {
       return next(error);

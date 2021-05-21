@@ -46,7 +46,11 @@ export const register = (history, credentail) => {
       switch (result.data.status) {
         case "OK":
           dispatch(setRegisterStateToSuccess("OK"));
-          history.goBack();
+          setTimeout(() => {
+            dispatch(setRegisterStateToReset());
+            // history.goBack();
+          }, 1000);
+          
           break;
 
         case "NOK":

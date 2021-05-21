@@ -15,6 +15,10 @@ let usersSchema = new Schema(
       type: String,
       required: true,
     },
+    userRole:{
+      type: String,
+      required: true
+    },
     create_time:{
       type: Date,
       default: Date.now, 
