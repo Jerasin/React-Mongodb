@@ -74,11 +74,11 @@ router.post("/login", async (req, res) => {
 router.post("/user", async (req, res, next) => {
   const { email, password } = req.body;
 
-  usersSchema.findOne({ email: email }, async (error, data) => {
+  usersSchema.findOne({ email: email }, async (error, result) => {
     if (data) {
       return res.json({
         status: "Duplicate",
-        data,
+        result: result,
       });
     } else {
       //    Encode password

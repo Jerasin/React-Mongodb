@@ -43,17 +43,18 @@ export const register = (history, credentail) => {
     dispatch(setRegisterStateToFetching());
     try {
       let result = await httpClient.post(server.REGISTER_URL, credentail);
+
       switch (result.data.status) {
-        case "OK":
-          dispatch(setRegisterStateToSuccess("OK"));
+        case 200:
+          dispatch(setRegisterStateToSuccess({status: 200 , result: result.data.result }));
           setTimeout(() => {
             dispatch(setRegisterStateToReset());
             history.goBack();
           }, 1000);
-          
+
           break;
 
-        case "NOK":
+        case 404:
           dispatch(setRegisterStateToFailed());
           break;
 
@@ -61,6 +62,7 @@ export const register = (history, credentail) => {
           dispatch(setRegisterStateToDuplicate("Duplicate"));
           break;
       }
+   
     } catch (error) {
       console.log(error);
       dispatch(setRegisterStateToFailed());

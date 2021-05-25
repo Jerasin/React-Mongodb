@@ -290,12 +290,8 @@ class Sell extends Component {
 
   renderRows = () => {
     try {
-      const {
-        isGetStock,
-        idEditStock,
-        isAddStock,
-        isFetching,
-      } = this.props.stockReducer;
+      const { isGetStock, idEditStock, isAddStock, isFetching } =
+        this.props.stockReducer;
 
       if (isGetStock === null) return;
       return isGetStock.result.map((data) => (
@@ -313,7 +309,7 @@ class Sell extends Component {
                 this.setState({
                   btnCheck: true,
                 });
-                console.log(this.state.check_Focus_Input);
+
                 if (e.target.value > data.product_Stock) {
                   alert("Stock ไม่พอ");
                   e.target.value = data.product_Stock;
@@ -327,9 +323,6 @@ class Sell extends Component {
               className="btn btn-primary btn-add"
               disabled={this.state.disabled.indexOf(data.product_Code) !== -1}
               onClick={(e) => {
-                console.log(data.product_Code);
-                console.log(this.state.check_Focus_Input);
-                console.log(this.state.value.qty);
                 if (!this.state.value.qty) return alert("Please Select");
                 if (data.product_Code !== this.state.check_Focus_Input)
                   return alert("กรุณาเลือกจำนวนสินค้า");
@@ -367,7 +360,6 @@ class Sell extends Component {
         </tr>
       ));
     } catch (err) {
-      console.log("map error");
       alert(err);
     }
   };
@@ -443,7 +435,6 @@ class Sell extends Component {
         </tr>
       ));
     } catch (err) {
-      console.log("map error");
       alert(err);
     }
   };
@@ -511,7 +502,6 @@ class Sell extends Component {
                       </p>
                     </ul>
 
-                    {/* {console.log(this.state.shopArrary)} */}
                     <ul className="pagination nav-end">
                       <label className="SerachPage-label">Page:</label>
                       <div style={{ marginRight: "2px" }}>
@@ -539,7 +529,6 @@ class Sell extends Component {
                       </button>
                     </ul>
                   </nav>
-                  {/* {console.log(this.state.disabled)} */}
 
                   {/* /.card-body */}
                 </div>

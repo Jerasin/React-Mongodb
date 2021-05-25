@@ -76,7 +76,7 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <Router basename={"/jinyong_1"}>
         {isLogin() && <Header />}
         {isLogin() && <Menu />}
 

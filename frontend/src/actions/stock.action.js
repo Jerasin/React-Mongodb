@@ -98,9 +98,8 @@ export const deleteProduct = (id) => {
 export const addProduct = (history, credentail) => {
   return async (dispatch) => {
     dispatch(setStateAddStockToFetching());
-    console.log(credentail);
+
     try {
-      console.log("Process Running");
       let result = await httpClient.post(server.PRODUCTS_URL, credentail);
       alert(JSON.stringify(result.data.status));
       switch (result.data.status) {

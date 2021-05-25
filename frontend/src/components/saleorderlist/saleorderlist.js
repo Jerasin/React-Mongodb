@@ -55,7 +55,6 @@ class Saleorderlist extends Component {
               <b className="page-link btn-now ">
                 {/* {data.product_Code} */}
                 {isGet.now}
-                {console.log(isGet.now)}
               </b>
             </li>
 
@@ -108,7 +107,6 @@ class Saleorderlist extends Component {
 
       if (isGet === null) return;
       if (isGet.status === 401) return;
-      // console.log(isGetStock === null && isFetching)
       return isGet.result.map((data) => (
         <tr key={data._id}>
           <td>{data.document_Number}</td>
@@ -132,7 +130,6 @@ class Saleorderlist extends Component {
         </tr>
       ));
     } catch (err) {
-      console.log("map error");
       alert(err);
     }
   };

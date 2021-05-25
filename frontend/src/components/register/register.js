@@ -48,23 +48,23 @@ class Register extends Component {
         Incorrect information
       </div>
     );
+    return;
   };
 
   showSuccess = () => {
-    return(
+    return (
       <div className="alert alert-success alert-dismissible">
-      <button
-        type="button"
-        className="close"
-        data-dismiss="alert"
-        aria-hidden="true"
-      >
-      </button>
-      <h5>
-        <i className="icon fas fa-check" /> Register Success
-      </h5>
-    </div>
-    )
+        <button
+          type="button"
+          className="close"
+          data-dismiss="alert"
+          aria-hidden="true"
+        ></button>
+        <h5>
+          <i className="icon fas fa-check" /> Register Success
+        </h5>
+      </div>
+    );
   };
 
   showDuplicate = () => {
@@ -84,14 +84,18 @@ class Register extends Component {
   };
 
   isVadidation = () => {
+    let regularEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
     if (this.state.email && this.state.password) {
-      return this.props.register(this.props.history, this.state);
+      if (regularEmail.test(this.state.email))
+        return this.props.register(this.props.history, this.state);
     }
 
-    alert("Please Select");
+    alert("Please Check Email and Password");
   };
 
   render() {
+    const { result, isError, isDuplicate } = this.props.registerReducer;
+
     return (
       <div className="hold-transition login-page">
         <div className="login-box">
@@ -142,17 +146,15 @@ class Register extends Component {
                   </div>
                 </div>
 
-                {this.props.registerReducer.isError && this.showError()}
+                {isError && this.showError()}
 
-                {this.props.registerReducer.result === "OK" && this.showSuccess()}
+                {result && this.showSuccess()}
 
                 {/*  logic alert แบบแรก  */}
                 {/* {this.props.registerReducer.isDuplicate && this.showDuplicate()} */}
 
                 {/* logic alert แบบสองเรียกว่า Ternery condition */}
-                {this.props.registerReducer.isDuplicate
-                  ? this.showDuplicate()
-                  : null}
+                {isDuplicate && this.showDuplicate()}
 
                 {/* Register */}
                 <div className="row">

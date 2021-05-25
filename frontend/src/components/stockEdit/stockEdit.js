@@ -25,18 +25,18 @@ class StockEdit extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps === null) return;
+    if (nextProps === null) return;
     if (nextProps.stockReducer.isEditStock === null) return;
-    if(nextProps.stockReducer.isEditStock.status === 401) localStorage.clear();
-    if(nextProps.stockReducer.isEditStock.status === 404) return this.props.history.goBack();
+    if (nextProps.stockReducer.isEditStock.status === 401) localStorage.clear();
+    if (nextProps.stockReducer.isEditStock.status === 404)
+      return this.props.history.goBack();
     this.setState({
       product_Code: nextProps.stockReducer.isEditStock.result_id.product_Code,
       product_Name: nextProps.stockReducer.isEditStock.result_id.product_Name,
       product_Price: nextProps.stockReducer.isEditStock.result_id.product_Price,
       product_Stock: nextProps.stockReducer.isEditStock.result_id.product_Stock,
-      product_Image: nextProps.stockReducer.isEditStock.result_id.product_Image
+      product_Image: nextProps.stockReducer.isEditStock.result_id.product_Image,
     });
-    
   }
 
   userLogUpdate() {
@@ -51,10 +51,8 @@ class StockEdit extends Component {
 
   isFetchingData = () => {
     try {
-      // console.log(isEditStock.result_id.product_Code)
       return (
         <form>
-          {console.log(this.state)}
           <div className="card-body">
             <div className="form-group">
               <label>Product Code </label>
@@ -68,7 +66,6 @@ class StockEdit extends Component {
                 value={this.state.product_Code}
                 onChange={(e) => {
                   this.setState({ product_Code: e.target.value });
-                  
                 }}
               />
             </div>
@@ -147,7 +144,7 @@ class StockEdit extends Component {
               className="btn btn-primary btn-submit"
               onClick={(e) => {
                 e.preventDefault();
-                
+
                 const formData = new FormData();
                 formData.append("product_Code", this.state.product_Code);
                 formData.append("product_Name", this.state.product_Name);
@@ -155,7 +152,7 @@ class StockEdit extends Component {
                 formData.append("product_Stock", this.state.product_Stock);
                 formData.append("product_Image", this.state.product_Image);
                 formData.append("update_by", this.userLogUpdate());
-                // console.log(formData);
+
                 this.props.updateProduct(
                   this.props.history,
                   this.props.match.params.id,
@@ -163,7 +160,6 @@ class StockEdit extends Component {
                 );
                 // this.props.history.push("/stock");
                 this.props.history.goBack();
-                
               }}
             >
               Submit
@@ -194,15 +190,13 @@ class StockEdit extends Component {
             <h3 className="card-title">Edit Product</h3>
           </div>
           {/* /.card-header */}
-          
+
           {/* form start */}
           {this.isFetchingData()}
-          
         </div>
       </div>
     );
   }
-
 }
 
 const mapStateToProps = ({ stockReducer }) => ({

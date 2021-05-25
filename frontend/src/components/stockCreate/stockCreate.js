@@ -24,38 +24,33 @@ class StockCreate extends Component {
     };
   }
 
-
   userLogCreate() {
     try {
       let token = localStorage.getItem("localStorageID");
       let decoded = jwt_decode(token);
       return decoded.email;
-    }catch(err){
+    } catch (err) {
       localStorage.clear();
     }
   }
-  
 
-  isProductCodeDulipcate = () =>{
-    return(
-                   
+  isProductCodeDulipcate = () => {
+    return (
       <div className="alert alert-danger alert-dismissible">
-      <button
-        type="button"
-        className="close"
-        data-dismiss="alert"
-        aria-hidden="true"
-      >
-        ×
-      </button>
-      <h5>
-        <i className="icon fas fa-ban" /> ProductCode Duplicate!
-      </h5>
-     
-    </div>
-
-    )
-  }
+        <button
+          type="button"
+          className="close"
+          data-dismiss="alert"
+          aria-hidden="true"
+        >
+          ×
+        </button>
+        <h5>
+          <i className="icon fas fa-ban" /> ProductCode Duplicate!
+        </h5>
+      </div>
+    );
+  };
 
   isCheck = () => {
     if (
@@ -81,8 +76,7 @@ class StockCreate extends Component {
           <div className="card-header">
             <h3 className="card-title">Create Product</h3>
           </div>
-          {console.log(this.state)}
-          
+
           {/* /.card-header */}
           {/* form start */}
           <form>
@@ -157,16 +151,13 @@ class StockCreate extends Component {
                       multiple
                       accept="image/*"
                       onChange={(e) => {
-                        this.setState({ product_Image: e.target.files[0] }
-                        );
-                        console.log(this.state.product_Image)
+                        this.setState({ product_Image: e.target.files[0] });
                       }}
                     />
                   </div>
                 </div>
               </div>
-                      {/* Popup Error */}
-         
+              {/* Popup Error */}
             </div>
 
             {/* /.card-body */}
@@ -185,9 +176,8 @@ class StockCreate extends Component {
                   formData.append("product_Stock", this.state.product_Stock);
                   formData.append("product_Image", this.state.product_Image);
                   formData.append("create_by", this.userLogCreate());
-                  console.log(formData);
+
                   this.props.addProduct(this.props.history, formData);
-                  console.log(formData);
                 }}
               >
                 Submit
@@ -208,7 +198,6 @@ class StockCreate extends Component {
       </div>
     );
   }
-
 }
 
 const mapStateToProps = (stockReducer, loginReducer) => ({
