@@ -1,86 +1,84 @@
-body{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.header_main{
-    background: #1877F2
-}
-
-.navbar-nav{
-    margin-right: 10px;
+.header_main {
+  background: #1877f2;
 }
 
-.hidden-xs{
-    color: rgba(0,0,0,.5)
+.navbar-nav {
+  margin-right: 10px;
 }
 
-.dropdown_menu_show{
-    max-width: 160px;
-    max-height: 150px;
-    margin-left: -23px;
-    margin-top: 6px;
-    
+.hidden-xs {
+  color: rgba(0, 0, 0, 0.5);
 }
 
-.container-button{
-    width: 80%;
-    height: 100%;
-    margin-left: 18px;
-    /* border: 1px solid red; */
-    border-radius: 5px;
-    background-color: #d4d4d4;
+.dropdown_menu_show {
+  max-width: 160px;
+  max-height: 220px;
+  margin-left: -100px;
+  margin-top: 1px;
 }
 
-.btn-signout{
-    margin: 0px;
-    background-color: #ffffff;
-    width: 100%;
+.container-button {
+  width: 80%;
+  height: 100%;
+  margin-left: 18px;
+  /* border: 1px solid red; */
+  border-radius: 5px;
+  background-color: #d4d4d4;
 }
 
-.text{
-    border: black solid 2px;
-    padding: 0px;
+.btn-signout {
+  margin: 0px;
+  background-color: #ffffff;
+  width: 100%;
+  border-radius: 5px;
 }
 
-.container-text{
-    /* border: 1px solid blue; */
-    width: 100%;
-    height: 100%;
-    background-color: #d4d4d4;
-    border-radius: 5px;
-    margin-bottom: 5px;
+.text {
+  width: 80%;
+  max-width: 220px;
+  padding: 2px;
 }
 
-.user-header{
-    background-color: rgb(219, 213, 213);
-    border: black solid 3px;
+.container-text {
+  /* border: 1px solid blue; */
+  width: 100%;
+  height: 100%;
+  background-color: #d4d4d4;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.user-header {
+  background-color: #212529;
+  border: black solid 3px;
+  padding: 0;
 }
 
 .ml-auto {
-    border: 1px ;
-    padding: 5px;
-    margin: 0;
-    height: auto;
-    background-color: #007bff;
+  border: 1px;
+  padding: 5px;
+  margin: 0;
+  height: auto;
+  background-color: #007bff;
 }
 
-.hidden-xs{
-    color: #fff;
+.hidden-xs {
+  color: #fff;
 }
 
-.container-img{
-    background-color: wheat;
-    padding: auto;
-    padding: 8px;
-    border: black solid 3px;
+.container-img {
+  background-color: wheat;
+  padding: auto;
+  padding: 8px;
+  border: black solid 3px;
 }
 
-
-
-
-
-
-
-
-
+.user-menu {
+  padding: 5px;
+  background-color: #0cd6bb;
+}

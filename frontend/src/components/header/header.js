@@ -16,7 +16,7 @@ class header extends Component {
     try {
       let token = localStorage.getItem("localStorageID");
       let decoded = jwt_decode(token);
-      return decoded.email;
+      return decoded.email.split("@")[0];
     } catch (err) {
       localStorage.clear();
     }
