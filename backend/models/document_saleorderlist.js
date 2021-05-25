@@ -2,27 +2,19 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const validator =require('validator');
 
-let document_saleorder_Schema = new Schema(
+let document_saleorderlist_Schema = new Schema(
   {
     document_Number:{
       type: Number,
       required: true,
     },
-    product_Code: {
+    grand_total:{
       type: Number,
-      required: true,
+      require: true
     },
-    product_Name: {
-      type: String,
-      required: true
-    },
-    product_Price: {
+    sku:{
       type: Number,
-      required: true
-    },
-    qty: {
-      type: Number,
-      required: true
+      require: true
     },
     create_time:{
       type: Date,
@@ -35,8 +27,8 @@ let document_saleorder_Schema = new Schema(
     },
   },
   {
-    collection: "document_saleorder",
+    collection: "document_saleorderlist",
   }
 );
 
-module.exports = mongoose.model("Document_saleorders", document_saleorder_Schema);
+module.exports = mongoose.model("Document_saleorderlist", document_saleorderlist_Schema);

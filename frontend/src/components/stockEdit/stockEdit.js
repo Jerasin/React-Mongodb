@@ -28,7 +28,7 @@ class StockEdit extends Component {
     if(nextProps === null) return;
     if (nextProps.stockReducer.isEditStock === null) return;
     if(nextProps.stockReducer.isEditStock.status === 401) localStorage.clear();
-    // console.log(nextProps.stockReducer.isEditStock.result_id.product_Code)
+    if(nextProps.stockReducer.isEditStock.status === 404) return this.props.history.goBack();
     this.setState({
       product_Code: nextProps.stockReducer.isEditStock.result_id.product_Code,
       product_Name: nextProps.stockReducer.isEditStock.result_id.product_Name,
@@ -147,7 +147,7 @@ class StockEdit extends Component {
               className="btn btn-primary btn-submit"
               onClick={(e) => {
                 e.preventDefault();
-                console.log(this.state);
+                
                 const formData = new FormData();
                 formData.append("product_Code", this.state.product_Code);
                 formData.append("product_Name", this.state.product_Name);
@@ -194,13 +194,15 @@ class StockEdit extends Component {
             <h3 className="card-title">Edit Product</h3>
           </div>
           {/* /.card-header */}
+          
           {/* form start */}
           {this.isFetchingData()}
-          {/* {this.state.isLoaded ? this.isFetchingData() : this.setState({isLoaded: true})} */}
+          
         </div>
       </div>
     );
   }
+
 }
 
 const mapStateToProps = ({ stockReducer }) => ({

@@ -3,6 +3,7 @@ import "./sell.css";
 import { imageUrl, limit, page } from "./../../Constatns";
 import * as stock_Actions from "./../../actions/stock.action";
 import * as saleorder_Actions from "./../../actions/saleorder.action";
+import * as saleorderlist_Actions from "../../actions/saleorderlist.action";
 import { connect } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { withRouter } from "react-router-dom";
@@ -30,8 +31,6 @@ class Sell extends Component {
   componentDidMount() {
     this.props.getProducts({ page: 1, limit: limit });
   }
-
-  componentWillUpdate() {}
 
   genDocumentId = () => {
     let randon_Id = Math.floor(Math.random() * 10000001);
@@ -232,23 +231,46 @@ class Sell extends Component {
     this.setState({ value: { qty: null } });
   }
 
-  createSo = () =>{
+  createSo = () => {
     this.state.shopArrary.map((data) => {
-      console.log(data.document_Number);
+      const formData = new FormData();
+      formData.append("product_Code", data.product_Code);
+      formData.append("product_Name", data.product_Name);
+      formData.append("product_Price", data.product_Price);
+      formData.append("qty", data.qty);
+      formData.append("document_Number", data.document_Number);
+      formData.append("create_by", this.userLogCreate());
+      this.props.add_SaleOrder(formData);
+    });
+  };
+
+  reCalStock = () => {
+    this.state.shopArrary.map((data) => {
+      let result = data.product_Stock - data.qty;
 
       const formData = new FormData();
       formData.append("product_Code", data.product_Code);
       formData.append("product_Name", data.product_Name);
       formData.append("product_Price", data.product_Price);
-      formData.append("product_Stock", data.product_Stock);
+      formData.append("product_Stock", result);
       formData.append("document_Number", data.document_Number);
-      formData.append("create_by", this.userLogCreate());
-      this.props.add_SaleOrder(this.props.history, formData);
+      this.props.update_SaleOrder(this.props.history, formData);
     });
-  }
+  };
 
-  onSave = () => {
-    this.createSo();
+  saleOrderList = () => {
+    const formData = new FormData();
+    formData.append("document_Number", this.state.document_Id.document_Number);
+    formData.append("grand_total", this.state.totalPrice);
+    formData.append("sku", this.state.shopArrary.length);
+    formData.append("create_by", this.userLogCreate());
+    this.props.create_SaleOrderList(formData);
+  };
+
+  onSave = async () => {
+    await this.createSo();
+    await this.reCalStock();
+    await this.saleOrderList();
   };
 
   onChangeSetUnit(e, data) {
@@ -262,10 +284,9 @@ class Sell extends Component {
 
   check_Focus_Input = (data) => {
     this.setState({
-      check_Focus_Input: data.product_Code
+      check_Focus_Input: data.product_Code,
     });
   };
-
 
   renderRows = () => {
     try {
@@ -292,7 +313,7 @@ class Sell extends Component {
                 this.setState({
                   btnCheck: true,
                 });
-                console.log(this.state.check_Focus_Input) 
+                console.log(this.state.check_Focus_Input);
                 if (e.target.value > data.product_Stock) {
                   alert("Stock ไม่พอ");
                   e.target.value = data.product_Stock;
@@ -306,12 +327,13 @@ class Sell extends Component {
               className="btn btn-primary btn-add"
               disabled={this.state.disabled.indexOf(data.product_Code) !== -1}
               onClick={(e) => {
-                console.log(data.product_Code)
-                console.log(this.state.check_Focus_Input)
-                console.log(this.state.value.qty)
+                console.log(data.product_Code);
+                console.log(this.state.check_Focus_Input);
+                console.log(this.state.value.qty);
                 if (!this.state.value.qty) return alert("Please Select");
-                if(data.product_Code !== this.state.check_Focus_Input ) return alert("กรุณาเลือกจำนวนสินค้า")
-                
+                if (data.product_Code !== this.state.check_Focus_Input)
+                  return alert("กรุณาเลือกจำนวนสินค้า");
+
                 this.onClickSetSell(data);
                 this.setState({
                   disabled: [...this.state.disabled, data.product_Code],
@@ -436,7 +458,6 @@ class Sell extends Component {
               <div className="row">
                 <div className="col-12">
                   {/* /.card-header */}
-
                   <div className="table-responsive tablet_1">
                     <table
                       id="example2"
@@ -519,7 +540,7 @@ class Sell extends Component {
                     </ul>
                   </nav>
                   {/* {console.log(this.state.disabled)} */}
-                  
+
                   {/* /.card-body */}
                 </div>
 
@@ -572,16 +593,23 @@ class Sell extends Component {
   }
 }
 
-const mapStateToProps = ({ stockReducer, loginReducer, saleorderReducer }) => ({
+const mapStateToProps = ({
   stockReducer,
   loginReducer,
   saleorderReducer,
+  saleorderlistReducer,
+}) => ({
+  stockReducer,
+  loginReducer,
+  saleorderReducer,
+  saleorderlistReducer,
 });
 
 const mapDispatchToProps = {
   // From to import * as actions
   ...stock_Actions,
   ...saleorder_Actions,
+  ...saleorderlist_Actions,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Sell));

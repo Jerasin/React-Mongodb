@@ -76,6 +76,18 @@ class menu extends Component {
                   </a>
                 </li>
 
+                <li
+                  className="nav-item"
+                  onClick={(e) => {
+                    this.props.history.push("/saleorderlist");
+                  }}
+                >
+                  <a className="nav-link">
+                    <i className="fas fa-history icon nav-icon" />
+                    <p>History</p>
+                  </a>
+                </li>
+
                 {this.userLogin() === "admin" &&<li
                   className="nav-item"
                   onClick={(e) => {

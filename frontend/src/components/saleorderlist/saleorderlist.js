@@ -1,48 +1,17 @@
 import React, { Component } from "react";
-import * as actions from "./../../actions/stock.action";
 import { connect } from "react-redux";
-import "./stock.css";
-import { imageUrl , limit } from "./../../Constatns";
+import "./saleorderlist.css";
 
+import * as SaleOrderList_Actions from "./../../actions/saleorderlist.action";
 import jwt_decode from "jwt-decode";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  useHistory,
-  useLocation,
-} from "react-router-dom";
-class Stock extends Component {
-  // dummyData = [
-  //   { data1: "xxx", data2: "xxx", data3: "xxx", data4: "xxx", data5: "xxx" },
-  //   { data1: "xxx", data2: "xxx", data3: "xxx", data4: "xxx", data5: "xxx" },
-  //   { data1: "xxx", data2: "xxx", data3: "xxx", data4: "xxx", data5: "xxx" },
-  //   { data1: "xxx", data2: "xxx", data3: "xxx", data4: "xxx", data5: "xxx" },
-  //   { data1: "xxx", data2: "xxx", data3: "xxx", data4: "xxx", data5: "xxx" },
-  // ];
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      serachPage: null,
-    };
-  }
-
-  componentDidMount() {
-    this.props.getProducts({ page: 1, limit: 5 });
-  }
-
-  serachPage(page , limit) {
+class Saleorderlist extends Component {
+  userLogin() {
     try {
-      const { isGetStock, isFetching } = this.props.stockReducer;
-      let lenthPage = Math.ceil(isGetStock.lenthData / limit);
-      if (page > lenthPage || page === null || !page)
-        return alert("Not you serach Page"); 
-      this.props.getProducts({ page: page, limit: limit });
+      let token = localStorage.getItem("localStorageID");
+      let decoded = jwt_decode(token);
+      return decoded.email;
     } catch (err) {
-      alert(err);
+      localStorage.clear();
     }
   }
 
@@ -56,22 +25,28 @@ class Stock extends Component {
     }
   }
 
+  checkRoleToshowMenu(page) {
+    if (this.checkRole() === "admin")
+      return this.props.getSaleOrderLists({ page: page, limit: 5 });
+    return this.props.getSaleOrderList({ page: page, limit: 5 });
+  }
+
   menuIndex() {
     try {
-      const { isGetStock, isFetching } = this.props.stockReducer;
-      if (isGetStock != null && isGetStock.status != "401" && !isFetching) {
+      const { isGet, isFetching } = this.props.saleorderlistReducer;
+      if (isGet != null && isGet.status != "401" && !isFetching) {
         return (
           <div className="ul-flex">
-            {isGetStock.after > 0 && (
+            {isGet.after > 0 && (
               <li className="page-item">
                 <b
                   className="page-link"
                   onClick={() => {
-                    this.props.getProducts({ page: isGetStock.after, limit: limit });
+                    this.checkRoleToshowMenu(isGet.after);
                   }}
                 >
                   {/* {data.product_Code} */}
-                  {isGetStock.after}
+                  {isGet.after}
                 </b>
               </li>
             )}
@@ -79,36 +54,37 @@ class Stock extends Component {
             <li className="page-item">
               <b className="page-link btn-now ">
                 {/* {data.product_Code} */}
-                {isGetStock.now}
+                {isGet.now}
+                {console.log(isGet.now)}
               </b>
             </li>
 
-            {isGetStock.next <= isGetStock.last && isGetStock.next != isGetStock.now && (
+            {isGet.next <= isGet.last && isGet.next != isGet.now && (
               <li className="page-item">
                 <b
                   className="page-link"
                   onClick={() => {
-                    this.props.getProducts({ page: isGetStock.next, limit: limit });
+                    this.checkRoleToshowMenu(isGet.next);
                   }}
                 >
                   {/* {data.product_Code} */}
-                  {isGetStock.next}
+                  {isGet.next}
                 </b>
               </li>
             )}
 
-            {isGetStock.last != isGetStock.next &&
-              isGetStock.last != isGetStock.now &&
-              isGetStock.last > isGetStock.now && (
+            {isGet.last != isGet.next &&
+              isGet.last != isGet.now &&
+              isGet.last > isGet.now && (
                 <li className="page-item">
                   <b
                     className="page-link"
                     onClick={() => {
-                      this.props.getProducts({ page: isGetStock.last, limit: limit });
+                      this.checkRoleToshowMenu(isGet.last);
                     }}
                   >
                     {/* {data.product_Code} */}
-                    {isGetStock.last}
+                    {isGet.last}
                   </b>
                 </li>
               )}
@@ -120,57 +96,39 @@ class Stock extends Component {
     }
   }
 
+  componentDidMount() {
+    if (this.checkRole() === "admin")
+      return this.props.getSaleOrderLists({ page: 1, limit: 5 });
+    this.props.getSaleOrderList({ page: 1, limit: 5, user: this.userLogin() });
+  }
+
   renderRows = () => {
     try {
-      const { isGetStock,idEditStock,isAddStock, isFetching } = this.props.stockReducer;
+      const { isGet } = this.props.saleorderlistReducer;
 
-      if (isGetStock === null  ) return;
-      if(isGetStock.status === 401) return;
+      if (isGet === null) return;
+      if (isGet.status === 401) return;
       // console.log(isGetStock === null && isFetching)
-      return isGetStock.result.map((data) => (
+      return isGet.result.map((data) => (
         <tr key={data._id}>
-          {this.checkRole() === "admin" && (
-            <td>
-              <button
-                className="btn btn-primary btn-edit"
-                onClick={() => {
-                  this.props.history.push(`/stock-edit/${data._id}`);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                className="btn btn-primary btn-delete"
-                onClick={(e) => {
-                  this.props.deleteProduct(data._id);
-                }}
-              >
-                Delete
-              </button>
-            </td>
-          )}
-          <td>{data.product_Code}</td>
-          <td>{data.product_Name}</td>
-          <td>{data.product_Price}</td>
-          <td>{data.product_Stock}</td>
-          <td className="data_Image">
-            {data.product_Image !== null && data.product_Image !=="null" ?
-              <img
-                className="image"
-                alt=""
-                src={`${imageUrl}/images/${
-                  data.product_Image
-                }?dummy=${Math.random()}`}
-              /> :  <img
-              src={`${process.env.PUBLIC_URL}/images/no_image.jpg`}
-              alt="Test1"
-              className="image"
-            />
-            }
-          
-    
+          <td>{data.document_Number}</td>
+          <td>{data.grand_total}</td>
+          <td>{data.sku}</td>
+          <td>{data.create_by}</td>
+          <td>{data.create_time.split("T")[0]}</td>
+
+          <td>
+            <button
+              className="btn btn-primary btn-edit"
+              onClick={() => {
+                this.props.history.push(
+                  `/saleorderdetail/${data.document_Number}`
+                );
+              }}
+            >
+              Detail
+            </button>
           </td>
-          <td>{data.update_time.split("T")[0]}</td>
         </tr>
       ));
     } catch (err) {
@@ -183,20 +141,12 @@ class Stock extends Component {
     return (
       <div className="content-wrapper">
         {/* Content Header (Page header) */}
-       
+
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Stock</h1>
-              </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <a href="#">Home</a>
-                  </li>
-                  <li className="breadcrumb-item active">Warehouse</li>
-                </ol>
+                <h1>SaleOrder List</h1>
               </div>
             </div>
           </div>
@@ -211,7 +161,7 @@ class Stock extends Component {
                   <div className="row">
                     {/* /.col */}
                     <div className="col-12">
-                      {this.checkRole() === "admin" && (
+                      {/* {this.userLogin() === "admin" && (
                         <button
                           style={{ marginBottom: "5px" }}
                           type="submit"
@@ -222,7 +172,7 @@ class Stock extends Component {
                         >
                           Create Product
                         </button>
-                      )}
+                      )} */}
                     </div>
                     {/* /.col */}
                   </div>
@@ -236,13 +186,12 @@ class Stock extends Component {
                       >
                         <thead>
                           <tr>
-                            {this.checkRole() === "admin" && <th>Status</th>}
-                            <th>Product Code</th>
-                            <th>Product Name</th>
-                            <th>Product Price</th>
-                            <th>Stock</th>
-                            <th>Image</th>
-                            <th>Update</th>
+                            <th>Document Number</th>
+                            <th>Grand Total</th>
+                            <th>SKU</th>
+                            <th>Create By</th>
+                            <th>Create Time</th>
+                            <th>Show Detail</th>
                           </tr>
                         </thead>
                         <tbody>{this.renderRows()}</tbody>
@@ -260,13 +209,12 @@ class Stock extends Component {
                         name="serachPage"
                         onChange={(e) => {
                           this.setState({ serachPage: e.target.value });
-                          
                         }}
                       />
                       <button
                         className="btn-select"
                         onClick={() => {
-                          this.serachPage(this.state.serachPage , limit);
+                          this.serachPage(this.state.serachPage);
                         }}
                       >
                         Select
@@ -284,21 +232,19 @@ class Stock extends Component {
           {/* /.container-fluid */}
         </section>
         {/* /.content */}
-   
       </div>
     );
   }
-
 }
 
-const mapStateToProps = ({ stockReducer, loginReducer }) => ({
-  stockReducer,
-  loginReducer,
+const mapStateToProps = ({ saleorderlistReducer, saleorderReducer }) => ({
+  saleorderlistReducer,
+  saleorderReducer,
 });
 
 const mapDispatchToProps = {
   // From to import * as actions
-  ...actions,
+  ...SaleOrderList_Actions,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Stock);
+export default connect(mapStateToProps, mapDispatchToProps)(Saleorderlist);

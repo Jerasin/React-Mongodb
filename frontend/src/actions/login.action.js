@@ -3,10 +3,8 @@ import {
   HTTP_LOGIN_SUCCESS,
   HTTP_LOGIN_FAILED,
   server,
-  TIMEOUT_CONFIG_S
+  TIMEOUT_CONFIG_S,
 } from "./../Constatns";
-
-
 
 import { httpClient } from "./../utils/HttpClient";
 import { setRegisterStateToFailed } from "./register.action";
@@ -26,42 +24,39 @@ export const setLoginStateToFailed = () => ({
 
 let TIMEOUT = 0;
 
-const SetTimeOut = (TIMEOUT_CONFIG) =>{
-    return  TIMEOUT =  TIMEOUT_CONFIG * 1000
-  }
-
-
+const SetTimeOut = (TIMEOUT_CONFIG) => {
+  return (TIMEOUT = TIMEOUT_CONFIG * 1000);
+};
 
 // export const autoLogin = ( test,dataUser) => {
 
 //   let Demodata = dataUser
-//     return (dispatch) => {    
-//       if (localStorage.getItem("status")  == "OK"){      
-//         dispatch(setLoginStateToSuccess(Demodata))          
+//     return (dispatch) => {
+//       if (localStorage.getItem("status")  == "OK"){
+//         dispatch(setLoginStateToSuccess(Demodata))
 //       }
-//     } 
+//     }
 //   }
 
-
-
-
 export const login = (history, credentail) => {
-  return async (dispatch , getState) => {
+  return async (dispatch, getState) => {
     dispatch(setLoginStateToFetching());
-    let result = await httpClient
-      .post(server.LOGIN_URL, credentail)
-        if(result.data.result == "NOK"){
-        dispatch(setLoginStateToFailed())
-        alert(JSON.stringify("Please Check"))
-        }else{
-        dispatch(setLoginStateToSuccess({status: "OK" , data: result.data.message}))
-        let data_json = JSON.parse(result.data.message)
-        localStorage.setItem("localStorageID",JSON.stringify(result.data.token))
-        getState().appReducer.app.forceUpdate();
-        history.push("/stock")
-        }
-      
-      
+    let result = await httpClient.post(server.LOGIN_URL, credentail);
+    if (result.data.status === 404) {
+      dispatch(setLoginStateToFailed());
+      alert(JSON.stringify("Please Check"));
+    } else {
+      dispatch(
+        setLoginStateToSuccess({
+          status: result.data.status,
+          data: result.data.result,
+        })
+      );
+
+      localStorage.setItem("localStorageID", JSON.stringify(result.data.token));
+      getState().appReducer.app.forceUpdate();
+      history.push("/stock");
+    }
 
     // dispatch(setRegisterStateToFailed())
   };

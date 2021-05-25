@@ -4,12 +4,20 @@ const validator =require('validator');
 
 let usersSchema = new Schema(
   {
+    user_Code:{
+      type: Number,
+      require: true,
+      unique: true,
+      default: Math.floor(Math.random() * 1000000001)
+    },
     email: {
       type: String,
       required: true,
       validate: {
-        validator: validator.isEmail
-      } 
+        validator: validator.isEmail // validator format email ก่อนบันทึกลง db
+      },
+      unique: true, // Primary Key
+      trim: true // ไว้จัดการตัวเช็คว่ามีช่องว่างไหมก่อนบันทึกลง db
     },
     password: {
       type: String,
@@ -19,12 +27,12 @@ let usersSchema = new Schema(
       type: String,
       required: true
     },
-    create_time:{
+    create_date:{
       type: Date,
       default: Date.now, 
       required: true,
     },
-    update_time:{
+    update_date:{
       type: Date,
       default: Date.now, 
       required: true,

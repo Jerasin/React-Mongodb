@@ -7,6 +7,11 @@ import Register from "./components/register/register";
 import Stock from "./components/stock/stock";
 import StockCreate from "./components/stockCreate";
 import StockEdit from "./components/stockEdit";
+import Saleorderlist from "./components/saleorderlist";
+import SaleorderDetail from './components/saleorderDetail'
+import User from "./components/user";
+import UserEdit from './components/userEdit/userEdit'
+
 import jwt_decode from "jwt-decode";
 
 import { connect } from "react-redux";
@@ -41,11 +46,11 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        isLogin() ? <Component {...props} /> :<Redirect to="/login" />  }
+        isLogin() ? <Component {...props} /> : <Redirect to="/login" />
+      }
     />
   );
 };
-
 
 const PublicRoute = ({ component: Component, ...rest }) => {
   return (
@@ -59,42 +64,22 @@ const PublicRoute = ({ component: Component, ...rest }) => {
 };
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checkLogin: false,
-    };
-  }
-
-  checkLogin() {
-    if (localStorage.getItem("localStorageID")) {
-      return this.setState({
-        checkLogin: true,
-      });
-    }
-    return this.setState({
-      checkLogin: false,
-    });
-  }
-
   componentDidMount() {
     this.props.setApp(this);
-    
   }
-  
 
   // Function help path to login
   redirectToLogin = () => {
     return <Redirect to="/login" />;
   };
 
+
   render() {
     return (
       <Router>
         {isLogin() && <Header />}
         {isLogin() && <Menu />}
-        
-        {console.log(this.state.checkLogin)}
+
         {/* ไม่รองรับ history.push
 
         <Route path="/" exact>
@@ -115,6 +100,12 @@ class App extends Component {
           <PrivateRoute path="/stock-create" component={StockCreate} />
           <PrivateRoute path="/stock-edit/:id" component={StockEdit} />
           <PrivateRoute path="/sell" component={Sell} />
+          <PrivateRoute path="/user" component={User} />
+          <PrivateRoute path="/user-edit/:id" component={UserEdit} />
+          <PrivateRoute path="/saleorderlist" component={Saleorderlist} />
+          <PrivateRoute path="/saleorderdetail/:id" component={SaleorderDetail} />
+          {/* <PrivateRoute path="/user-edit/*" exact component={this.redirectToStock} /> */}
+          
           {/* Case  Path Other is  have't Route */}
           <Route path="*" exact component={this.redirectToLogin} />
           <Route path="/" exact component={this.redirectToLogin} />

@@ -48,7 +48,7 @@ export const register = (history, credentail) => {
           dispatch(setRegisterStateToSuccess("OK"));
           setTimeout(() => {
             dispatch(setRegisterStateToReset());
-            // history.goBack();
+            history.goBack();
           }, 1000);
           
           break;

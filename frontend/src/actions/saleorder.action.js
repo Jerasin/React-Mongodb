@@ -2,6 +2,9 @@ import {
   HTTP_CREATE_SALEORDER_FETCHING,
   HTTP_CREATE_SALEORDER_SUCCESS,
   HTTP_CREATE_SALEORDER_FAILED,
+  HTTP_UPDATE_SALEORDER_FETCHING,
+  HTTP_UPDATE_SALEORDER_SUCCESS,
+  HTTP_UPDATE_SALEORDER_FAILED,
   server,
   SALEORDER_URL,
 } from "../Constatns";
@@ -23,24 +26,29 @@ export const setStateCreateSaleOrderToFailed = () => ({
     type: HTTP_CREATE_SALEORDER_FAILED,
 })
 
+export const setStateUpdateStockBySaleOrderToFailed = () => ({
+    type: HTTP_UPDATE_SALEORDER_FAILED,
+})
 
-export const add_SaleOrder = (history,credentail) =>{
-    let fakedata = [
-        {"document_Number": 11150,
-          "product_Code": 1150,
-          "product_Price": 2,
-          "product_Stock": 3,
-          "product_Name": "222",
-        }
-    ]
+export const setStateUpdateStockBySaleOrderToFetching = () => ({
+    type: HTTP_UPDATE_SALEORDER_FETCHING,
+    
+})
+
+export const setStateUpdateStockBySaleOrderToSuccess = (payload) => ({
+    type: HTTP_UPDATE_SALEORDER_SUCCESS,
+    payload
+    
+})
+
+export const add_SaleOrder = (credentail) =>{
+    
     return async (dispatch) =>{
         dispatch(setStateCreateSaleOrderToFetching());
-        console.log(credentail)
         try{
             
             let result = await  httpClient.post(server.SALEORDER_URL,credentail );
             dispatch(setStateCreateSaleOrderToSuccess(result.data))
-            history.goBack();
 
         }
         catch(err){
@@ -50,3 +58,17 @@ export const add_SaleOrder = (history,credentail) =>{
 
 }
 
+export const update_SaleOrder = (history,credentail) =>{
+    return async dispatch => {  
+    dispatch(setStateUpdateStockBySaleOrderToFetching())
+     try{
+      
+      let result = await httpClient.put(`${server.SALEORDER_URL}`,credentail);
+      dispatch(setStateUpdateStockBySaleOrderToSuccess(result))
+      history.push("/saleorderlist");
+     }
+     catch(err){
+      dispatch(setStateUpdateStockBySaleOrderToFailed())
+     }
+    }
+  }

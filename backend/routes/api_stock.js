@@ -141,8 +141,8 @@ uploadImage = async (files, doc) => {
 router.route("/product/:id").get(authorization,async(req, res) => {
   const { id } = req.params;
   await productsSchema.findById(id, (err, doc) => {
-    if (err) return err;
-    fs.exists(
+    if (err) return res.json({status: 404 , message: "Not Found"});
+    fs.access(
       path.resolve("./" + "/upload/images/") + "/" + doc.product_Image
     );
     res.json({ result_id: doc});

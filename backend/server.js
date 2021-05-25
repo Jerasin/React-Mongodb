@@ -40,9 +40,12 @@ app.use("/api/stock", productsRoute)
 const saleorderRoute = require('./routes/api_saleorder');
 app.use("/api/saleorder" , saleorderRoute)
 
+const saleorderlistRoute = require('./routes/api_saleorderlist');
+app.use("/api/saleorderlist" , saleorderlistRoute)
+
 // Connect Mongodb
 
-mongoose.connect(config.mongoUri)
+mongoose.connect(config.mongoUri,{ useNewUrlParser: true , useUnifiedTopology: true})
 
 app.listen(port,()=>{
     console.log("Server running "+ port)
