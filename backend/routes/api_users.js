@@ -75,7 +75,7 @@ router.post("/user", async (req, res, next) => {
   const { email, password } = req.body;
 
   usersSchema.findOne({ email: email }, async (error, result) => {
-    if (data) {
+    if (result) {
       return res.json({
         status: "Duplicate",
         result: result,

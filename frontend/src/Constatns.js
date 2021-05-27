@@ -1,6 +1,12 @@
 // Path Url
-export const apiUrl = "http://191.101.38.12:4000/api";
-export const imageUrl = "http://191.101.38.12:4000";
+
+// Production
+// export const apiUrl = "http://191.101.38.12:4000/api";
+// export const imageUrl = "http://191.101.38.12:4000";
+
+// Developement
+export const apiUrl = "http://127.0.0.1:4000/api";
+export const imageUrl = "http://127.0.0.1:4000";
 
 export const server = {
   REGISTER_URL: "/authen/user",

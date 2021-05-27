@@ -164,6 +164,7 @@ class Register extends Component {
                       onClick={(e) => {
                         e.preventDefault();
                         this.isVadidation();
+                        
                       }}
                       type="button"
                       disabled={this.props.registerReducer.result === "OK"}

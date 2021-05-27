@@ -8,7 +8,9 @@ let usersSchema = new Schema(
       type: Number,
       require: true,
       unique: true,
-      default: Math.floor(Math.random() * 1000000001)
+      default: function() {
+        return Math.floor(Math.random() * 900030000) + 1000000
+    }
     },
     email: {
       type: String,

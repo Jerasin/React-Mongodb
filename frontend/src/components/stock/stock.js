@@ -36,13 +36,15 @@ class Stock extends Component {
 
   serachPage(page , limit) {
     try {
-      const { isGetStock, isFetching } = this.props.stockReducer;
+      const { isGetStock, isFetching , isError } = this.props.stockReducer;
+      if(isError) localStorage.removeItem("localStorageID");
       let lenthPage = Math.ceil(isGetStock.lenthData / limit);
       if (page > lenthPage || page === null || !page)
         return alert("Not you serach Page"); 
       this.props.getProducts({ page: page, limit: limit });
     } catch (err) {
       alert(err);
+      localStorage.clear()
     }
   }
 
@@ -122,8 +124,8 @@ class Stock extends Component {
 
   renderRows = () => {
     try {
-      const { isGetStock,idEditStock,isAddStock, isFetching } = this.props.stockReducer;
-
+      const { isGetStock,idEditStock,isAddStock, isFetching ,isError } = this.props.stockReducer;
+      if(isError) return localStorage.clear()
       if (isGetStock === null  ) return;
       if(isGetStock.status === 401) return;
       // console.log(isGetStock === null && isFetching)
@@ -174,8 +176,7 @@ class Stock extends Component {
         </tr>
       ));
     } catch (err) {
-      console.log("map error");
-      alert(err);
+      localStorage.clear()
     }
   };
 

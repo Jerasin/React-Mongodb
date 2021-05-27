@@ -17,6 +17,7 @@ class Sell extends Component {
       shopArrary: [],
       disabled: [],
       value: { qty: null },
+      valuesetUnit: [],
       document_Id: { document_Number: null },
       totalPrice: 0,
       indexPage: {
@@ -30,6 +31,17 @@ class Sell extends Component {
 
   componentDidMount() {
     this.props.getProducts({ page: 1, limit: limit });
+  }
+
+  // เอา 2 obj มารวมกันแล้ว setstate
+  componentWillReceiveProps(nextProps) {
+    if (nextProps === null) return;
+    if (nextProps.stockReducer.isGetStock === null) return;
+    this.setState({
+      valuesetUnit: nextProps.stockReducer.isGetStock.result.map((data) => {
+        return { ...data, ...this.state.value };
+      }),
+    });
   }
 
   genDocumentId = () => {
@@ -68,7 +80,7 @@ class Sell extends Component {
     }
   }
 
-  menuIndex() {
+  paginatedBar() {
     try {
       const { isGetStock, isFetching } = this.props.stockReducer;
       if (isGetStock != null && isGetStock.status != "401" && !isFetching) {
@@ -226,9 +238,20 @@ class Sell extends Component {
   }
 
   onClickSetSell(data) {
-    let qty = { ...data, ...this.state.value };
-    this.setState({ shopArrary: [...this.state.shopArrary, qty] });
-    this.setState({ value: { qty: null } });
+    this.state.valuesetUnit.map((obj) => {
+      if (obj.product_Code === data.product_Code) {
+        if (!obj.qty) return alert("Please Select");
+        if (obj.qty <= data.product_Stock) {
+          this.state.shopArrary.push(obj);
+          this.setState({
+            disabled: [...this.state.disabled, data.product_Code],
+          });
+
+          this.forceUpdate();
+        }
+      }
+      return;
+    });
   }
 
   createSo = () => {
@@ -277,9 +300,13 @@ class Sell extends Component {
     this.check_Focus_Input(data);
     this.genDocumentId();
     let qty = parseInt(e.target.value);
-    this.setState({
-      value: { qty: qty },
-    });
+    this.setState((prevState) => ({
+      valuesetUnit: prevState.valuesetUnit.map((obj) =>
+        obj.product_Code === data.product_Code
+          ? Object.assign(obj, { qty: qty })
+          : obj
+      ),
+    }));
   }
 
   check_Focus_Input = (data) => {
@@ -290,17 +317,22 @@ class Sell extends Component {
 
   renderRows = () => {
     try {
-      const { isGetStock, idEditStock, isAddStock, isFetching } =
-        this.props.stockReducer;
+      const {
+        isGetStock,
+        idEditStock,
+        isAddStock,
+        isFetching,
+      } = this.props.stockReducer;
 
-      if (isGetStock === null) return;
-      return isGetStock.result.map((data) => (
+      if (isGetStock === null && !isFetching) return;
+      return this.state.valuesetUnit.map((data, index) => (
         <tr key={data._id}>
           <td>
             <input
               className="shop_product_sell"
               type="number"
               min="0"
+              kye={data.product_Code}
               disabled={this.state.disabled.indexOf(data.product_Code) !== -1}
               name="shop_product_sell"
               id={data.product_Code}
@@ -312,8 +344,9 @@ class Sell extends Component {
 
                 if (e.target.value > data.product_Stock) {
                   alert("Stock ไม่พอ");
-                  e.target.value = data.product_Stock;
+                  return (e.target.value = data.product_Stock);
                 }
+
                 this.onChangeSetUnit(e, data);
               }}
             />
@@ -323,14 +356,11 @@ class Sell extends Component {
               className="btn btn-primary btn-add"
               disabled={this.state.disabled.indexOf(data.product_Code) !== -1}
               onClick={(e) => {
-                if (!this.state.value.qty) return alert("Please Select");
-                if (data.product_Code !== this.state.check_Focus_Input)
-                  return alert("กรุณาเลือกจำนวนสินค้า");
-
                 this.onClickSetSell(data);
-                this.setState({
-                  disabled: [...this.state.disabled, data.product_Code],
-                });
+                // if (data.product_Code !== this.state.check_Focus_Input)
+                //   return alert("กรุณาเลือกจำนวนสินค้า");
+                
+                
               }}
             >
               Add
@@ -361,6 +391,7 @@ class Sell extends Component {
       ));
     } catch (err) {
       alert(err);
+      localStorage.clear()
     }
   };
 
@@ -415,6 +446,8 @@ class Sell extends Component {
       if (this.state.shopArrary === null) return;
       let indexStart = (this.state.indexPage.page - 1) * limit;
       let indexEnd = this.state.indexPage.page * limit;
+      console.log(this.state.shopArrary);
+
       return this.state.shopArrary.slice(indexStart, indexEnd).map((data) => (
         <tr key={data._id}>
           <td>
@@ -436,6 +469,7 @@ class Sell extends Component {
       ));
     } catch (err) {
       alert(err);
+      localStorage.clear()
     }
   };
 
@@ -505,7 +539,7 @@ class Sell extends Component {
                     <ul className="pagination nav-end">
                       <label className="SerachPage-label">Page:</label>
                       <div style={{ marginRight: "2px" }}>
-                        {this.menuIndex()}
+                        {this.paginatedBar()}
                       </div>
                       <input
                         type="text"
