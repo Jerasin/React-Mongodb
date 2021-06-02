@@ -7,13 +7,89 @@ class User extends Component {
     this.props.getUsers({ page: page, limit: limit });
   }
 
+  serachPage(page, limit) {
+    try {
+      const { isGetStock, isFetching, isError } = this.props.userReducer;
+      if (isError) localStorage.removeItem("localStorageID");
+      let lenthPage = Math.ceil(isGetStock.lenthData / limit);
+      if (page > lenthPage || page === null || !page || page !== 0 || typeof(page) !== "number")
+        return alert("Not you serach Page");
+      this.props.getgetUsers({ page: page, limit: limit });
+    } catch (err) {
+      alert(err);
+      localStorage.clear();
+    }
+  }
+
+  menuIndex() {
+    try {
+      const { isGet, isFetching } = this.props.userReducer;
+      if (isGet != null && isGet.status != "401" && !isFetching) {
+        return (
+          <div className="ul-flex">
+            {isGet.after > 0 && (
+              <li className="page-item">
+                <b
+                  className="page-link"
+                  onClick={() => {
+                    this.props.getUsers({ page: isGet.after, limit: limit });
+                  }}
+                >
+                  {isGet.after}
+                </b>
+              </li>
+            )}
+
+            <li className="page-item">
+              <b className="page-link btn-now ">{isGet.now}</b>
+            </li>
+
+            {isGet.next <= isGet.last && isGet.next != isGet.now && (
+              <li className="page-item">
+                <b
+                  className="page-link"
+                  onClick={() => {
+                    this.props.getUsers({ page: isGet.next, limit: limit });
+                  }}
+                >
+                  {/* {data.product_Code} */}
+                  {isGet.next}
+                </b>
+              </li>
+            )}
+
+            {isGet.last != isGet.next &&
+              isGet.last != isGet.now &&
+              isGet.last > isGet.now && (
+                <li className="page-item">
+                  <b
+                    className="page-link"
+                    onClick={() => {
+                      this.props.getProducts({
+                        page: isGet.last,
+                        limit: limit,
+                      });
+                    }}
+                  >
+                    {isGet.last}
+                  </b>
+                </li>
+              )}
+          </div>
+        );
+      }
+    } catch (err) {
+      alert(err);
+    }
+  }
+
   renderRows = () => {
     try {
       const { isGet, isFetching } = this.props.userReducer;
 
       if (isGet === null) return;
       if (isGet.status === 401) return;
-      if(isGet.lenthdata === 0) return this.props.history.push("/stock")
+      if (isGet.lenthdata === 0) return this.props.history.push("/stock");
       // console.log(isGetStock === null && isFetching)
       return isGet.result.map((data) => (
         <tr key={data._id}>
@@ -26,9 +102,7 @@ class User extends Component {
             <button
               className="btn btn-primary btn-edit"
               onClick={() => {
-                this.props.history.push(
-                  `/user-edit/${data.user_Code}`
-                );
+                this.props.history.push(`/user-edit/${data.user_Code}`);
               }}
             >
               Edit
@@ -86,7 +160,7 @@ class User extends Component {
                   </div>
 
                   <nav aria-label="..." className="main-nav">
-                    {/* <ul className="pagination nav-start">{this.menuIndex()}</ul> */}
+                    <ul className="pagination nav-start">{this.menuIndex()}</ul>
                     <ul className="pagination nav-end">
                       <label className="SerachPage-label">SerachPage:</label>
                       <input
@@ -100,7 +174,7 @@ class User extends Component {
                       <button
                         className="btn-select"
                         onClick={() => {
-                          this.serachPage(this.state.serachPage);
+                          this.serachPage(this.state.serachPage, limit);
                         }}
                       >
                         Select

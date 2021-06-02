@@ -62,7 +62,7 @@ class Sell extends Component {
   serachPage(page) {
     try {
       const { isGetStock, isFetching } = this.props.stockReducer;
-      if (page > isGetStock.lenthData || page === null || !page)
+      if (page > isGetStock.lenthData || page === null || !page || page !== 0 || typeof(page) !== "number")
         return alert("Not you serach Page");
       this.props.getProducts({ page: page, limit: limit });
     } catch (err) {
