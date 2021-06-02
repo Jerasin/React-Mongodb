@@ -12,8 +12,7 @@ class Sell extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      serachPage_OnFetch: null,
-      serachPage_Onpage: null,
+      serachPage: null,
       shopArrary: [],
       disabled: [],
       value: { qty: null },
@@ -62,7 +61,13 @@ class Sell extends Component {
   serachPage(page) {
     try {
       const { isGetStock, isFetching } = this.props.stockReducer;
-      if (page > isGetStock.lenthData || page === null || !page || page !== 0 || typeof(page) !== "number")
+      if (
+        page > isGetStock.lenthData ||
+        page === null ||
+        !page ||
+        page === 0 ||
+        typeof page !== "number"
+      )
         return alert("Not you serach Page");
       this.props.getProducts({ page: page, limit: limit });
     } catch (err) {
@@ -359,8 +364,6 @@ class Sell extends Component {
                 this.onClickSetSell(data);
                 // if (data.product_Code !== this.state.check_Focus_Input)
                 //   return alert("กรุณาเลือกจำนวนสินค้า");
-                
-                
               }}
             >
               Add
@@ -391,7 +394,7 @@ class Sell extends Component {
       ));
     } catch (err) {
       alert(err);
-      localStorage.clear()
+      localStorage.clear();
     }
   };
 
@@ -469,7 +472,7 @@ class Sell extends Component {
       ));
     } catch (err) {
       alert(err);
-      localStorage.clear()
+      localStorage.clear();
     }
   };
 
@@ -546,7 +549,7 @@ class Sell extends Component {
                         className="nav-input"
                         name="serachPage"
                         onChange={(e) => {
-                          this.setState({ serachPage_OnFetch: e.target.value });
+                          this.setState({ serachPage: e.target.value });
                           // this.setState({
                           //   btnCheck: true
                           // })
@@ -556,7 +559,11 @@ class Sell extends Component {
                       <button
                         className="btn-select"
                         onClick={() => {
-                          this.serachPage(this.state.serachPage_OnFetch);
+                          let numberSerachPage = parseInt(
+                            this.state.serachPage
+                          );
+
+                          this.serachPage(numberSerachPage, limit);
                         }}
                       >
                         Select

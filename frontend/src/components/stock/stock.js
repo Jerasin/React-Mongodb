@@ -39,7 +39,7 @@ class Stock extends Component {
       const { isGetStock, isFetching , isError } = this.props.stockReducer;
       if(isError) localStorage.removeItem("localStorageID");
       let lenthPage = Math.ceil(isGetStock.lenthData / limit);
-      if (page > lenthPage || page === null || !page || page !== 0 || typeof(page) !== "number")
+      if (page > lenthPage || page === null || !page || page === 0 || typeof(page) !== "number")
         return alert("Not you serach Page"); 
       this.props.getProducts({ page: page, limit: limit });
     } catch (err) {

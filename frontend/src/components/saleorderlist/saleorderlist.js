@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./saleorderlist.css";
-
+import {limit} from './../../Constatns'
 import * as SaleOrderList_Actions from "./../../actions/saleorderlist.action";
 import jwt_decode from "jwt-decode";
 class Saleorderlist extends Component {
@@ -12,6 +12,29 @@ class Saleorderlist extends Component {
       return decoded.email;
     } catch (err) {
       localStorage.clear();
+    }
+  }
+
+  serachPage(page) {
+    try {
+      const { isGet, isFetching } = this.props.saleorderlistReducer;
+      if (
+        page > isGet.lenthData ||
+        page === null ||
+        !page ||
+        page === 0 ||
+        typeof(page) !== "number"
+      )
+        return alert("Not you serach Page");
+      if (this.checkRole() === "admin")
+        return this.props.getSaleOrderLists({ page: page, limit: limit });
+      this.props.getSaleOrderList({
+        page: page,
+        limit: limit,
+        user: this.userLogin(),
+      });
+    } catch (err) {
+      alert(err);
     }
   }
 
@@ -211,7 +234,8 @@ class Saleorderlist extends Component {
                       <button
                         className="btn-select"
                         onClick={() => {
-                          this.serachPage(this.state.serachPage);
+                          let numberSerachPage = parseInt(this.state.serachPage)
+                          this.serachPage(numberSerachPage ,limit);
                         }}
                       >
                         Select

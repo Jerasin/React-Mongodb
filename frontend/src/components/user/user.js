@@ -9,10 +9,10 @@ class User extends Component {
 
   serachPage(page, limit) {
     try {
-      const { isGetStock, isFetching, isError } = this.props.userReducer;
+      const { isGet, isFetching, isError } = this.props.userReducer;
       if (isError) localStorage.removeItem("localStorageID");
-      let lenthPage = Math.ceil(isGetStock.lenthData / limit);
-      if (page > lenthPage || page === null || !page || page !== 0 || typeof(page) !== "number")
+      let lenthPage = Math.ceil(isGet.lenthData / limit);
+      if (page > lenthPage || page === null || !page || page === 0 || typeof(page) !== "number")
         return alert("Not you serach Page");
       this.props.getgetUsers({ page: page, limit: limit });
     } catch (err) {

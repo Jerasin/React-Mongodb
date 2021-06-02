@@ -35,7 +35,7 @@ router.post("/", authorization, async (req, res, next) => {
 
 
   // Get SO List Iimit By User Role
-router.route("/getSaleOrderList").post(async (req, res) => {
+router.route("/getSaleOrderList").post(authorization,async (req, res) => {
   const { page, limit , user } = req.body;
   // let page = 1;
   // let limit = 5;
@@ -79,7 +79,7 @@ router.route("/getSaleOrderList").post(async (req, res) => {
 });
 
 // Get SO List Iimit By User Admin
-router.route("/getSaleOrderLists").post(async (req, res) => {
+router.route("/getSaleOrderLists").post(authorization , async (req, res) => {
   const { page, limit} = req.body;
   // let page = 1;
   // let limit = 5;
