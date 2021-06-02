@@ -267,7 +267,11 @@ class Stock extends Component {
                       <button
                         className="btn-select"
                         onClick={() => {
-                          this.serachPage(this.state.serachPage , limit);
+                          let numberSerachPage = parseInt(
+                            this.state.serachPage
+                          );
+
+                          this.serachPage(numberSerachPage, limit);
                         }}
                       >
                         Select

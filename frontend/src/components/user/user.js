@@ -14,7 +14,7 @@ class User extends Component {
       let lenthPage = Math.ceil(isGet.lenthData / limit);
       if (page > lenthPage || page === null || !page || page === 0 || typeof(page) !== "number")
         return alert("Not you serach Page");
-      this.props.getgetUsers({ page: page, limit: limit });
+      this.props.getUsers({ page: page, limit: limit });
     } catch (err) {
       alert(err);
       localStorage.clear();
@@ -174,7 +174,11 @@ class User extends Component {
                       <button
                         className="btn-select"
                         onClick={() => {
-                          this.serachPage(this.state.serachPage, limit);
+                          let numberSerachPage = parseInt(
+                            this.state.serachPage
+                          );
+
+                          this.serachPage(numberSerachPage, limit);
                         }}
                       >
                         Select

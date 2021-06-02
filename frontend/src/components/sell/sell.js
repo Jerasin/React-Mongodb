@@ -66,7 +66,7 @@ class Sell extends Component {
         page === null ||
         !page ||
         page === 0 ||
-        typeof page !== "number"
+        typeof(page) !== "number"
       )
         return alert("Not you serach Page");
       this.props.getProducts({ page: page, limit: limit });
